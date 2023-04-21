@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Loading from "../../../components/Loading";
 
 export default function Forget() {
   const navigate = useNavigate();
@@ -22,11 +23,13 @@ export default function Forget() {
     password: "",
     confirm: "",
   });
-  
+  const [isLoading, setIsLoading] = useState(false);
+
   const disable = state.password !== state.confirm;
   
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/reset",
@@ -50,6 +53,10 @@ export default function Forget() {
     });
   };
 
+  if (isLoading) {
+    return <Loading/>;
+  }
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

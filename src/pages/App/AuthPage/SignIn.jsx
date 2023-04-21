@@ -14,8 +14,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../../components/Loading";
 
-export default function SignIn({ setUser }) {
+export default function SignIn({ setUser, role }) {
   const navigate = useNavigate();
   const theme = createTheme({
     palette: {
@@ -29,9 +30,10 @@ export default function SignIn({ setUser }) {
     password: "",
     role: "Customer",
   });
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:5000/login",
@@ -44,10 +46,14 @@ export default function SignIn({ setUser }) {
       
       
       localStorage.setItem("token", (response.data.token));
-      console.log(`data: ${JSON.stringify(response.data.token, null, 2)}`);
-      console.log(`name: ${data.customer.name}, id: ${data.customer._id.$oid}`);
-      setUser(response.data.token );
-      navigate("/");
+      const decodedUser = JSON.parse(window.atob(response.data.token.split(".")[1]));
+      console.log(`data: ${JSON.stringify(decodedUser, null, 2)}`);
+      console.log(`name: ${data.customer.name}, id: ${data.customer._id.$oid}, role: ${data.customer.role}`);
+      setUser(decodedUser.sub);
+      
+      decodedUser.sub.role === "Customer" ? navigate("/") : navigate("/admin");
+
+      
     } catch (error) {
       console.log(error);
     }
@@ -60,6 +66,10 @@ export default function SignIn({ setUser }) {
     });
   };
 
+  if (isLoading) {
+    return <Loading/>;
+  }
+  
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

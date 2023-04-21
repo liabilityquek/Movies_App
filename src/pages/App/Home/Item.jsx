@@ -2,7 +2,7 @@ import React from "react";
 import { Paper, Box } from "@mui/material";
 import FavouriteIcon from "./FavouriteIcon";
 
-export default function Item({ images, token }) {
+export default function Item({ images }) {
   
     return (
       <Paper sx={{ backgroundColor: "black" }}>
@@ -25,7 +25,7 @@ export default function Item({ images, token }) {
                   : image.overview}
               </p>
               <p style={{ color: "white" }}>Rating: {image.vote_average}</p>
-              <FavouriteIcon image={image} token={token}/>
+              <FavouriteIcon image={image} />
             </Box>
           ))}
         </Box>

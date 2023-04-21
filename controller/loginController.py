@@ -2,12 +2,13 @@ from flask import request, jsonify
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
 from model.userModel import User
+import controller.subscriptionController as subscriptionController
 
 def create(request, bcrypt):
     email = request.json.get('email')
     password = request.json.get('password')
     name = request.json.get('name')
-    role = request.json.get('option')
+    role = request.json.get('role')
     
     if len(password) < 3:
         return jsonify({"message": "Password too short"}), 400
@@ -18,8 +19,13 @@ def create(request, bcrypt):
     
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     new_customer = User(email=email, password=hashed_password, name=name, role=role)
-    new_customer.save()
+    if role == "Customer":
+        subscriptionController.setup_subscription(new_customer)
+        new_customer.save()
+    else:
+        new_customer.save()
     return jsonify(new_customer), 201
+
 
 
 def login(request, bcrypt):

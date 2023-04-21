@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import HistoryBar from "./HistoryBar";
-import WordCloudComponent from "./WordCloud";
 import axios from "axios";
+import HistoryGrid from "./HistoryGrid";
+import Loading from "../../../components/Loading";
+import Typography from "@mui/material/Typography";
 
-export default function History() {
+export default function History({ userName }) {
   const [showHistory, setShowHistory] = useState([]);
   const token = localStorage.getItem("token");
   console.log( `token in History: ${token}`);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const showAllHistory = async () => {
@@ -16,30 +19,70 @@ export default function History() {
             "Authorization": `Bearer ${token}`,
           },
         });
-        setShowHistory(response.data.search_history);
+    
+        let movieResults = [];
+    
+        const removeDuplicateHistoryWords = response.data.search_history.filter(
+          (element, index) => {
+            return response.data.search_history.indexOf(element) === index;
+          }
+        );
+        for (const element of removeDuplicateHistoryWords) {
+          const movieData = await getMoviesBasedOnHistory(element);
+          movieResults.push(...movieData.results);
+        }
+        setShowHistory(movieResults);
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
+        setIsLoading(true)
       }
     };
-    if (showHistory) {
-      showAllHistory();
-    }
+    
+    showAllHistory();
   }, []);
 
-const data = showHistory.reduce((acc, word) => {
-    const findWordCount = acc.findIndex((e) => e.text === word);
-    if (findWordCount !== -1) {
-      acc[findWordCount].value += 10;
-    } else {
-      acc.push({ text: word, value: 10 });
+  const getMoviesBasedOnHistory = async (element) => {
+    try {
+      const response = await axios.get("https://api.themoviedb.org/3/search/movie", {
+        params: {
+          api_key: "8c6afdd4f8e60448372b995095920f03",
+          query: element,
+        },
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      
+      console.log(JSON.stringify(response.data, null, 2));
+      return response.data;
+    } catch (error) {
+      console.error(error);
     }
-    return acc;
-  }, []);
-console.log(JSON.stringify(data, null, 2));
+  }
+
+  if (isLoading) {
+    return <Loading/>;
+  }
+
   return (
     <>
+
       <HistoryBar />
-       <WordCloudComponent data={data} />
+      <Typography
+        component="h1"
+        variant="h5"
+        align="center"
+        color="text.primary"
+        gutterBottom
+        sx={{ color: "white", marginTop: 4 }}
+      >
+        Welcome back, {userName}
+      </Typography>
+
+      <HistoryGrid movieData={showHistory} itemsPerPage={9} isLoading={isLoading}/>
+
+      
     </>
   );
 }

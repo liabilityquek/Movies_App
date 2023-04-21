@@ -4,11 +4,7 @@ import NewUser from "./NewUser";
 import Forget from "./Forget";
 import React, { useState } from "react";
 
-export default function AuthPage({ setUser, user }) {
-
-  if (user !== null) {
-    return <Navigate to="/" replace={true} />;
-  }
+export default function AuthPage({ setUser }) {
 
   return (
     <Routes>
