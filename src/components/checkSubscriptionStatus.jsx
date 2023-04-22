@@ -39,11 +39,14 @@ export default function CheckSubscriptionStatus({ setSubscriptionActive }) {
     if (account && account.end_date) {
       const isEndDate = moment(account.end_date).isSameOrBefore(moment());
       setSubscriptionActive(!isEndDate);
+      console.log(`isEndDte: ${isEndDate}`)
       if (isEndDate) {
+        console.log(`isEndDte: ${isEndDate}`)
         navigate("/account");
       }
     }
   }, [account, navigate, setSubscriptionActive]);
+
   
   useEffect(() => {
     if (token === null || token === undefined) {

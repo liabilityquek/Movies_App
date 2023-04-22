@@ -55,6 +55,7 @@ function PricingContent({
         console.log("Plan updated successfully");
         const switchedPlan = plan !== account.plan;
         onSubscriptionChanged(switchedPlan);
+        console.log(`plan: ${plan}`);
         setSelectedPlan(plan);
       } else {
         console.log("Error updating plan");
@@ -73,7 +74,10 @@ function PricingContent({
         position="static"
         color="default"
         elevation={5}
-        sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}`, marginTop: 4, }}
+        sx={{
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          marginTop: 4,
+        }}
       ></AppBar>
       {/* Hero unit */}
       <Container
@@ -95,10 +99,18 @@ function PricingContent({
       </Container>
 
       <Container maxWidth="md" component="main">
-        <Grid container spacing={5} ml={8} justifyContent={"center"}>
+        <Grid container spacing={5} justifyContent={"center"}>
           {tiers.map((tier) => (
             <Grid item key={tier.title} xs={12} sm={6} md={4}>
-              <Card sx={{ height: "100%" }}>
+              <Card
+                sx={{
+                  height: "100%",
+                  borderWidth: account.plan === tier.title ? "5px" : "0px",
+                  borderColor:
+                    account.plan === tier.title ? "darkred" : "transparent",
+                  borderStyle: "solid",
+                }}
+              >
                 <CardHeader
                   title={tier.title}
                   subheader={tier.subheader}
@@ -153,13 +165,15 @@ function PricingContent({
                   </ul>
                 </CardContent>
                 <CardActions>
-                  <Button
-                    fullWidth
-                    variant={tier.buttonVariant}
-                    onClick={() => handleSelectPlan(tier.title)}
-                  >
-                    {tier.buttonText}
-                  </Button>
+                  {account.plan !== tier.title && (
+                    <Button
+                      fullWidth
+                      variant={tier.buttonVariant}
+                      onClick={() => handleSelectPlan(tier.title)}
+                    >
+                      {tier.buttonText}
+                    </Button>
+                  )}
                 </CardActions>
               </Card>
             </Grid>

@@ -11,6 +11,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Box from "@mui/material/Box";
 import CardHeader from "@mui/material/CardHeader";
 import HistoryIcon from "./HistoryIcon";
+import moment from "moment";
 
 const ExpandMore = styled(IconButton)(({ theme }) => ({
   transform: "rotate(0deg)",
@@ -41,7 +42,7 @@ export default function HistoryCard({ movieData, onDelete }) {
           }
           subheader={
             <Typography sx={{ color: "white" }}>
-              {movieData.release_date}
+              {moment(movieData.release_date).format("DD MMM YYYY")}
             </Typography>
           }
         />

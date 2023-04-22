@@ -82,6 +82,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
         );
       }
       fetchAccountDetails();
+      
     } catch (error) {
       console.log(error);
     }

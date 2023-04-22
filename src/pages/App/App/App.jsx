@@ -16,7 +16,6 @@ import Unauthorized from "../Unauthorized";
 import Loading from "../../../components/Loading";
 import Subscription from "../Subscription/Subscription";
 import CheckSubscriptionStatus from "../../../components/checkSubscriptionStatus";
-import Dashboard from "../Admin/Dashboard";
 
 const App = () => {
   const [user, setUser] = useState(getUser());
@@ -24,6 +23,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [subscriptionActive, setSubscriptionActive] = useState(true);
   const [userName, setUserName] = useState("");
+
 
   const handleSubscriptionActive = (active) => {
     setSubscriptionActive(active);
@@ -66,6 +66,7 @@ const App = () => {
     const role = decodedUser.sub.role;
 
     if (role === "Customer" && subscriptionActive) {
+      console.log(`subscriptionActive : ${subscriptionActive}`);
       return (
         <>
           <CheckSubscriptionStatus
@@ -73,13 +74,13 @@ const App = () => {
             subscriptionActive={true}
           />
           <Routes>
-            <Route path="/" element={<Home userName={userName} />} />
-            <Route path="/history" element={<History userName={userName} />} />
+            <Route path="/" element={<Home userName={userName} subscriptionActive={subscriptionActive}/>} />
+            <Route path="/history" element={<History userName={userName} subscriptionActive={subscriptionActive}/>} />
             <Route
               path="/favourites"
-              element={<Favourites userName={userName} />}
+              element={<Favourites userName={userName} subscriptionActive={subscriptionActive}/>}
             />
-            <Route path="/games" element={<Games userName={userName} />} />
+            <Route path="/games" element={<Games userName={userName} subscriptionActive={subscriptionActive}/>} />
             <Route path="/login" element={<SignIn setUser={setUser} />} />
             <Route path="/signup" element={<NewUser />} />
             <Route path="/forget" element={<Forget />} />
@@ -89,7 +90,7 @@ const App = () => {
                 <Subscription
                   userName={userName}
                   handleSubscriptionActive={handleSubscriptionActive}
-                  subscriptionActive={true}
+                  subscriptionActive={subscriptionActive}
                 />
               }
             />
@@ -99,8 +100,10 @@ const App = () => {
           </Routes>
         </>
       );
-    } else if (role === "Customer" && !subscriptionActive) {
-      console.log(`subscriptionActive cancelled: ${subscriptionActive}`);
+    } 
+    else if (role === "Customer" && !subscriptionActive) {
+      console.log(`subscriptionActive : ${subscriptionActive}`);
+      
       return (
         <>
           <CheckSubscriptionStatus
@@ -108,7 +111,7 @@ const App = () => {
             subscriptionActive={false}
           />
           <Routes>
-            <Route
+            {/* <Route
               path="/account"
               element={
                 <Subscription
@@ -117,12 +120,13 @@ const App = () => {
                   subscriptionActive={false}
                 />
               }
-            />
-            <Route path="/*" element={<Subscription />} />
+            /> */}
+            <Route path="/*" element={<Subscription userName={userName} handleSubscriptionActive={handleSubscriptionActive} subscriptionActive={false}/>} />
           </Routes>
         </>
       );
-    } else {
+    } 
+    else {
       return (
         <Routes>
           <Route path="/" element={<Unauthorized />} />
@@ -139,10 +143,6 @@ const App = () => {
             element={<EditGame userName={userName} />}
           />
           <Route path="/admin" element={<Admin userName={userName} />} />
-          <Route
-            path="/dashboard"
-            element={<Dashboard userName={userName} />}
-          />
           <Route path="/login" element={<SignIn setUser={setUser} />} />
           <Route path="/signup" element={<NewUser />} />
           <Route path="/forget" element={<Forget />} />

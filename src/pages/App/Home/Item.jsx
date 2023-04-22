@@ -1,7 +1,6 @@
 import React from "react";
 import { Paper, Box } from "@mui/material";
 import FavouriteIcon from "./FavouriteIcon";
-
 export default function Item({ images }) {
   
     return (

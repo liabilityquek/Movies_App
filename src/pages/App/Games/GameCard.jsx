@@ -51,7 +51,7 @@ export default function GameCard({ games, likes, handleLikeChange, onGameUpdated
             <CardMedia
               component="img"
               height="300"
-              image={`${games.image_url}`}
+              image={games.image_url ? games.image_url : "../../../../images/image not available.jpg"}
               alt={games.title}
             />
             <CardContent>

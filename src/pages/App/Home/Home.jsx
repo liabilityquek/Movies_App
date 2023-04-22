@@ -4,14 +4,12 @@ import axios from "axios";
 import MovieImages from "./MovieImages";
 import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
 
-export default function Home({ userName, subscriptionActive }) {
+export default function Home({ userName }) {
   const [searchValue, setSearchValue] = useState("");
   const [movies, setMovies] = useState([]);
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   console.log(`token: ${token}`);
 
@@ -72,12 +70,6 @@ export default function Home({ userName, subscriptionActive }) {
       appendSearchValue();
     }
   }, [searchValue]);
-
-  useEffect(() => {
-    if (!subscriptionActive) {
-      navigate("/account");
-    }
-  }, [subscriptionActive, navigate]);
 
   if (isLoading) {
     return <Loading />;

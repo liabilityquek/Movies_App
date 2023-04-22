@@ -70,13 +70,6 @@ export default function AdminBar() {
               </MenuItem>         
               <MenuItem
                 component={RouterLink}
-                to="/dashboard"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                Dashboard
-              </MenuItem>   
-              <MenuItem
-                component={RouterLink}
                 to="/login"
                 onClick={handleLogout}
                 style={{ textDecoration: "none", color: "inherit" }}
