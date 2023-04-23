@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import axios from "axios";
+import { useRefresh } from "../AuthPage/UseRefresh";
 
 export default function FavouriteIcon({ image }) {
   const [favourite, setFavourite] = useState(false);
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
-  const userId = id.sub.id
+  const userId = id.sub.id;
+  const { refreshToken } = useRefresh();
   useEffect(() => {
     const checkIfMovieIsInsideFavourite = async () => {
       try {
@@ -16,13 +18,31 @@ export default function FavouriteIcon({ image }) {
           )}`,
           {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         setFavourite(response.data.hasOwnProperty("favourites"));
       } catch (error) {
         console.log(error);
+        await refreshToken();
+        const newToken = await refreshToken();
+        console.log("New token:", newToken);
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
+              image.title
+            )}`,
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+          setFavourite(response.data.hasOwnProperty("favourites"));
+        } catch (error) {
+          console.log(error);
+        }
       }
     };
     checkIfMovieIsInsideFavourite();
@@ -43,13 +63,36 @@ export default function FavouriteIcon({ image }) {
           },
           {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         console.log("Adding to favorites: ", response.data);
       } catch (error) {
         console.log(error);
+        await refreshToken();
+        const newToken = await refreshToken();
+        console.log("New token:", newToken);
+        try {
+          const response = await axios.post(
+            `http://localhost:5000/favourite/${userId}`,
+            {
+              title: image.title,
+              year: image.release_date,
+              rating: image.vote_average,
+              description: image.overview,
+              image_url: `https://image.tmdb.org/t/p/w500${image.poster_path}`,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+          console.log("Adding to favorites: ", response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     } else {
       // DELETE request when removing from favorites
@@ -60,13 +103,31 @@ export default function FavouriteIcon({ image }) {
           )}`,
           {
             headers: {
-              "Authorization": `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
           }
         );
         console.log("Removing from favorites: ", response.data);
       } catch (error) {
         console.log(error);
+        await refreshToken();
+        const newToken = await refreshToken();
+        console.log("New token:", newToken);
+        try {
+          const response = await axios.delete(
+            `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+              image.title
+            )}`,
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+          console.log("Removing from favorites: ", response.data);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };

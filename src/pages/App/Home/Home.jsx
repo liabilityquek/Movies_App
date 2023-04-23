@@ -4,12 +4,14 @@ import axios from "axios";
 import MovieImages from "./MovieImages";
 import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
+import { useRefresh } from "./../AuthPage/UseRefresh";
 
 export default function Home({ userName }) {
   const [searchValue, setSearchValue] = useState("");
   const [movies, setMovies] = useState([]);
   const token = localStorage.getItem("token");
   const [isLoading, setIsLoading] = useState(false);
+  const { refreshToken } = useRefresh();
 
   console.log(`token: ${token}`);
 
@@ -31,6 +33,23 @@ export default function Home({ userName }) {
       console.log(JSON.stringify(response.data, null, 2));
     } catch (error) {
       console.error(error);
+      await refreshToken();
+      const newToken = await refreshToken();
+      console.log("New token:", newToken);
+      try {
+        const response = await axios.post(
+          "http://localhost:5000/history",
+          { searchValue: searchValue },
+          {
+            headers: {
+              Authorization: "Bearer " + newToken,
+            },
+          }
+        );
+        console.log(JSON.stringify(response.data, null, 2));
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -56,7 +75,31 @@ export default function Home({ userName }) {
         setMovies(response.data.results);
       } catch (error) {
         console.error(error);
-        setIsLoading(false);
+        await refreshToken();
+        const newToken = await refreshToken();
+        console.log("New token:", newToken);
+        try {
+          setIsLoading(true);
+          const response = await axios.get(
+            "https://api.themoviedb.org/3/search/movie",
+            {
+              params: {
+                api_key: "8c6afdd4f8e60448372b995095920f03",
+                query: searchValue,
+              },
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          );
+
+          // console.log(JSON.stringify(response.data, null, 2));
+          setIsLoading(false);
+          setMovies(response.data.results);
+        } catch (error) {
+          console.error(error);
+          setIsLoading(false);
+        }
       }
     };
 
@@ -69,7 +112,7 @@ export default function Home({ userName }) {
     if (searchValue) {
       appendSearchValue();
     }
-  }, [searchValue]);
+  }, []);
 
   if (isLoading) {
     return <Loading />;
@@ -77,7 +120,7 @@ export default function Home({ userName }) {
 
   return (
     <>
-    <HomeBar handleSearch={handleSearch} />
+      <HomeBar handleSearch={handleSearch} />
       <Typography
         component="h1"
         variant="h5"
@@ -88,7 +131,7 @@ export default function Home({ userName }) {
       >
         Welcome back, {userName}
       </Typography>
-      
+
       <MovieImages images={movies} />
     </>
   );

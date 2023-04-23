@@ -40,20 +40,24 @@ export default function SignIn({ setUser, role }) {
         loginTry
       );
       const data = response.data;
+
       if (!response.statusText === "OK") {
         throw new Error(data.error || "Network error");
       }
-      
-      
-      localStorage.setItem("token", (response.data.token));
-      const decodedUser = JSON.parse(window.atob(response.data.token.split(".")[1]));
-      console.log(`data: ${JSON.stringify(decodedUser, null, 2)}`);
-      console.log(`name: ${data.customer.name}, id: ${data.customer._id.$oid}, role: ${data.customer.role}`);
-      setUser(decodedUser.sub);
-      
-      decodedUser.sub.role === "Customer" ? navigate("/") : navigate("/admin");
 
-      
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("refresh_token", response.data.refresh_token);
+
+      const decodedUser = JSON.parse(
+        window.atob(response.data.token.split(".")[1])
+      );
+      console.log(`data: ${JSON.stringify(decodedUser, null, 2)}`);
+      console.log(
+        `name: ${data.customer.name}, id: ${data.customer._id.$oid}, role: ${data.customer.role}`
+      );
+      setUser(decodedUser.sub);
+
+      decodedUser.sub.role === "Customer" ? navigate("/") : navigate("/admin");
     } catch (error) {
       console.log(error);
     }
@@ -65,11 +69,12 @@ export default function SignIn({ setUser, role }) {
       [e.target.name]: e.target.value,
     });
   };
-
-  if (isLoading) {
-    return <Loading/>;
-  }
   
+  if (isLoading) {
+    return <Loading />;
+  }
+
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

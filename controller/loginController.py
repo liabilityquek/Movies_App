@@ -1,5 +1,6 @@
+
 from flask import request, jsonify 
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 from datetime import timedelta
 from model.userModel import User
 import controller.subscriptionController as subscriptionController
@@ -25,9 +26,8 @@ def create(request, bcrypt):
     else:
         new_customer.save()
     return jsonify(new_customer), 201
-
-
-
+  
+    
 def login(request, bcrypt):
     email = request.json.get('email')
     password = request.json.get('password')
@@ -46,8 +46,17 @@ def login(request, bcrypt):
     
     if bcrypt.check_password_hash(user.password, password):
         # Set the expiration time to 30 minutes
-        token = create_access_token(identity={"email": email, "role": user.role, "id": str(user.id), "name": user.name}, expires_delta=timedelta(minutes=30))
-        return jsonify({"token": token, "customer": user}), 200
+        token = create_access_token(identity={"email": email, "role": user.role, "id": str(user.id), "name": user.name}, expires_delta=timedelta(minutes=1))
+        refresh_token = create_refresh_token(identity={"email": email, "role": user.role, "id": str(user.id), "name": user.name})
+        print("Generated access_token:", token)
+        print("Generated refresh_token:", refresh_token)
+        return jsonify({"token": token, "customer": user, "refresh_token": refresh_token}), 200
+
+def refresh():
+    current_user = get_jwt_identity()
+    token = create_access_token(identity=current_user, expires_delta=timedelta(seconds=15), fresh=False)
+    print("Generated token in refresh():", token)
+    return jsonify({"token": token}), 200
 
 
 def reset(request, bcrypt):

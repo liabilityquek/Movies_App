@@ -11,6 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Typography from "@mui/material/Typography";
 import Loading from "../../../components/Loading";
+import { useRefresh } from "../AuthPage/UseRefresh";
 
 const ShowFavourites = ({ itemsPerPage }) => {
   const [favourite, setFavourite] = useState([]);
@@ -20,6 +21,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id;
+  const { refreshToken } = useRefresh();
   const sortHandleChange = (e) => {
     setSort(e.target.value);
   };
@@ -28,11 +30,8 @@ const ShowFavourites = ({ itemsPerPage }) => {
     setPage(value);
   };
 
-  useEffect(() => {
-    getAllFavourites();
-  }, []);
-
   const getAllFavourites = async () => {
+    
     try {
       const response = await axios.get(
         `http://localhost:5000/showfavourite/${userId}`,
@@ -44,13 +43,31 @@ const ShowFavourites = ({ itemsPerPage }) => {
       );
       setFavourite(response.data.favourites);
       setIsLoading(false);
-      // console.log(`ShowFhowFavourites: ${JSON.stringify(response.data.favourites[0].name.$oid)}`);
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      console.log("New token:", newToken);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/showfavourite/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          }
+        );
+        setFavourite(response.data.favourites);
+        setIsLoading(false);
+        // console.log(`ShowFhowFavourites: ${JSON.stringify(response.data.favourites[0].name.$oid)}`);
+      } catch (error) {
+        console.log(error);
+      }
+
     }
   };
 
   const removeFavourites = async (title) => {
+    
     try {
       const response = await axios.delete(
         `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
@@ -69,8 +86,33 @@ const ShowFavourites = ({ itemsPerPage }) => {
       setIsLoading(false);
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      console.log("New token:", newToken);
+      try {
+        const response = await axios.delete(
+          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+            title
+          )}`,
+          {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          }
+        );
+        console.log("Removing from favorites: ", response.data);
+        setFavourite((prevFavourites) =>
+          prevFavourites.filter((fav) => fav.title !== title)
+        );
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
+
+  useEffect(() => {
+    getAllFavourites();
+  }, []);
 
   const sortOption = () => {
     return favourite.slice().sort((a, b) => {

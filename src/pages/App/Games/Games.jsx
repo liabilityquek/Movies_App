@@ -4,6 +4,8 @@ import GameGrid from "./GameGrid";
 import axios from "axios";
 import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
+import { useRefresh } from './../AuthPage/UseRefresh';
+
 
 const Games = ({ userName }) => {
   const [games, setGames] = useState([]);
@@ -11,30 +13,48 @@ const Games = ({ userName }) => {
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id
   const [isLoading, setIsLoading] = useState(true);
+  const { refreshToken }  = useRefresh();
+  
 
   const fetchGames = useCallback(async () => {
+
     try {
       const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       setGames(response.data.games);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
-      setIsLoading(true)
+      // await refreshToken()
+        const newToken = await refreshToken();
+        console.log("New token:", newToken);
+        try {
+          const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          });
+  
+          setGames(response.data.games);
+          setIsLoading(false);
+        } catch (error) {
+          console.log(error);
+          setIsLoading(true);
+        }
     }
-  }, [token, userId]);
-
+  }, [token, userId, refreshToken]);
+  
   const handleGameUpdated = () => {
     fetchGames();
   };
 
   useEffect(() => {
     fetchGames();
-  }, [fetchGames]);
+  }, []);
 
   if (isLoading) {
     return <Loading/>;
@@ -53,7 +73,7 @@ const Games = ({ userName }) => {
       >
         Welcome back, {userName}
       </Typography>
-      <GameGrid itemsPerPage={9} games={games} onGameUpdated={handleGameUpdated}/>
+      <GameGrid itemsPerPage={9} games={games} onGameUpdated={handleGameUpdated} />
     </>
   );
 };

@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import SubscriptionPlans from "./SubscriptionPlans";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
+import { useRefresh } from "../AuthPage/UseRefresh";
 
 export default function Subscription({ userName, handleSubscriptionActive }) {
   const token = localStorage.getItem("token");
@@ -19,7 +20,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [switchedPlan, setSwitchedPlan] = useState(null);
-
+  const { refreshToken } = useRefresh();
 
   const fetchAccountDetails = useCallback(async () => {
     try {
@@ -42,21 +43,47 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       } else {
         handleSubscriptionActive(false);
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
-      setIsLoading(false);
+      const newToken = await refreshToken();
+      console.log("New token:", newToken);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/getsubscriptiondetails/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          }
+        );
+
+        setAccount(response.data.message);
+        console.log(
+          `fetch account details: ${JSON.stringify(response.data, null, 2)}`
+        );
+        setIsLoading(false);
+        if (response.data.message.end_date === undefined) {
+          handleSubscriptionActive(true);
+        } else {
+          handleSubscriptionActive(false);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [token, userId, handleSubscriptionActive]);
+  }, [token, userId, handleSubscriptionActive, refreshToken]);
 
   useEffect(() => {
     if (account) {
       console.log(`fetch account end date: ${account.end_date}`);
     }
-  }, [account]);
-  
+  }, []);
+
   useEffect(() => {
     fetchAccountDetails();
-  }, [fetchAccountDetails]);
+  }, []);
 
   const handleButtonClick = async () => {
     try {
@@ -82,9 +109,36 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
         );
       }
       fetchAccountDetails();
-      
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      console.log("New token:", newToken);
+      try {
+        if (account.end_date === undefined) {
+          const response = await axios.post(
+            `http://localhost:5000/cancelsubscription/${userId}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+        } else if (account.end_date !== undefined) {
+          const response = await axios.post(
+            `http://localhost:5000/reinstatesubscription/${userId}`,
+            {},
+            {
+              headers: {
+                Authorization: `Bearer ${newToken}`,
+              },
+            }
+          );
+        }
+        fetchAccountDetails();
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -94,7 +148,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
 
   const regularPrice = account.plan === "Monthly" ? 9.99 : 99.99;
 
-  const effective_start_date = account.start_date
+  const effective_start_date = account.start_date;
 
   const trialDays = moment(account.trial_end).diff(
     effective_start_date,
@@ -104,17 +158,22 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const trialEndFormatted = moment(account.trial_end).format("DD MMM YYYY");
 
   const isTrialDays = moment(account.trial_end).isAfter(moment()); //true means got free trial
-  console.log('account.end_date:', account.end_date, 'isTrialDays:', isTrialDays);
+  console.log(
+    "account.end_date:",
+    account.end_date,
+    "isTrialDays:",
+    isTrialDays
+  );
 
   const getNextBillingDate = () => {
     const dateFormat = "ddd, DD MMM YYYY HH:mm:ss z";
     const start_date = moment(account.start_date, dateFormat);
-    const trial_end = moment(account.trial_end, dateFormat).add(1, 'days');
+    const trial_end = moment(account.trial_end, dateFormat).add(1, "days");
     const reinstate_date = moment(account.reinstate_date, dateFormat);
     const effective_start_date = reinstate_date.isValid()
       ? reinstate_date
       : start_date;
-  
+
     const increment = account.plan === "Monthly" ? 30 : 365;
     const daysSinceEffectiveStart = moment().diff(effective_start_date, "days");
     const daysSinceTrialEnd = daysSinceEffectiveStart - trialDays;
@@ -122,16 +181,15 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
     const nextBillingDate = trial_end
       .clone()
       .add(cyclesPassed * increment, "days");
-  
+
     return nextBillingDate.format("DD MMM YYYY");
   };
-  
 
   const AlertMessage = (switchedPlan) => {
     let message = "";
     if (switchedPlan) {
       message = "Subscription Plan successfully changed";
-    }else if(selectedPlan && selectedPlan === account.plan){
+    } else if (selectedPlan && selectedPlan === account.plan) {
       message = `You are currently on a ${selectedPlan} Subscription Plan`;
     }
     return (
@@ -144,17 +202,14 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const onSubscriptionChanged = (newSwitchedPlan) => {
     fetchAccountDetails();
     setShowAlert(true);
-    setSwitchedPlan(newSwitchedPlan)
+    setSwitchedPlan(newSwitchedPlan);
     if (newSwitchedPlan) {
       setSelectedPlan(null);
     }
     setTimeout(() => {
       setShowAlert(false);
     }, 3000);
-
   };
-
-
 
   return (
     <>
@@ -167,17 +222,17 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
         justifyContent="center"
         height="10vh"
       >
-      <Typography
-        component="h1"
-        variant="h5"
-        align="center"
-        color="text.primary"
-        gutterBottom
-        sx={{ color: "white", marginTop: 4 }}
-      >
-        Welcome back, {userName}
-      </Typography>
-      
+        <Typography
+          component="h1"
+          variant="h5"
+          align="center"
+          color="text.primary"
+          gutterBottom
+          sx={{ color: "white", marginTop: 4 }}
+        >
+          Welcome back, {userName}
+        </Typography>
+
         <Typography
           variant="h6"
           sx={{ fontSize: "1rem", mt: 1, textAlign: "center", color: "white" }}

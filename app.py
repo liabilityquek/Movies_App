@@ -8,7 +8,7 @@ import controller.subscriptionController as subscriptionController
 from flask.helpers import send_from_directory
 from flask_bcrypt import Bcrypt
 from config.database import init_database
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required
 from flask_cors import CORS
 from datetime import timedelta
 from dotenv import load_dotenv
@@ -184,7 +184,10 @@ def handle_get_subscription_details(user_id):
     except ValueError as e:
         return jsonify({"message": str(e)}), 400
 
-
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token():
+    return loginController.refresh()
 
 if __name__ == "__main__":
     app.run()

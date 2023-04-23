@@ -62,7 +62,7 @@ export default function GameCard({ games, likes, handleLikeChange, onGameUpdated
             </CardContent>
             <CardActions disableSpacing>
               <IconButton aria-label="like this game">
-                <GameIcon games={games} handleLikeChange={handleLikeChange} likes={likes} onGameUpdated={onGameUpdated}/>
+                <GameIcon games={games} handleLikeChange={handleLikeChange} likes={likes} onGameUpdated={onGameUpdated} />
               </IconButton>
               <Tooltip title="Play Game">
                 <a href={games.site} target="_blank" rel="noopener noreferrer">
