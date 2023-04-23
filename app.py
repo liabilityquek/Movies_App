@@ -32,15 +32,27 @@ def home():
 
 @app.route("/login", methods=["POST"])
 def user_login():
-   return loginController.login(request, bcrypt)
+    try:
+        response = loginController.login(request, bcrypt)
+        return response 
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400
 
 @app.route("/create", methods=["POST"])
 def user_create():
-    return loginController.create(request,bcrypt)
+    try:
+        response = loginController.create(request, bcrypt)
+        return response
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400
 
 @app.route("/reset", methods=["POST"])
 def user_reset():
-    return loginController.reset(request,bcrypt)
+    try:
+        response = loginController.reset(request, bcrypt)
+        return response
+    except ValueError as e:
+        return jsonify({"message": str(e)}), 400   
 
 @app.route("/history", methods=["POST"])
 @authController.auth

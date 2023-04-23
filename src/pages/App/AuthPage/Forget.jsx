@@ -5,6 +5,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../../components/Loading";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default function Forget() {
   const navigate = useNavigate();
@@ -24,6 +27,7 @@ export default function Forget() {
     confirm: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const disable = state.password !== state.confirm;
   
@@ -41,7 +45,9 @@ export default function Forget() {
       }
       navigate("/login");
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.error)
+      setIsLoading(false);
+      console.log(`error: ${JSON.stringify(error.response.data.error)}`);
     }
 
   };
@@ -56,10 +62,23 @@ export default function Forget() {
   if (isLoading) {
     return <Loading/>;
   }
+
+  const AlertMessage = () => {
+    if (!error) return null;
+        return (
+      <Stack sx={{ width: "100%" }} spacing={2}>
+        <Alert severity="error" onClose={() => {setError("")}}>
+          <AlertTitle>Error</AlertTitle>
+          <strong>{error}</strong>
+        </Alert>
+      </Stack>
+    );
+  };
   
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {error && <AlertMessage />}
       <Grid
         container
         alignItems="center"

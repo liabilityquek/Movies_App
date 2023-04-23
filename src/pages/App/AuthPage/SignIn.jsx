@@ -15,6 +15,9 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
+import Alert from "@mui/material/Alert";
+import Stack from "@mui/material/Stack";
+import AlertTitle from "@mui/material/AlertTitle";
 
 export default function SignIn({ setUser, role }) {
   const navigate = useNavigate();
@@ -31,9 +34,12 @@ export default function SignIn({ setUser, role }) {
     role: "Customer",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+    setError("");
     try {
       const response = await axios.post(
         "http://localhost:5000/login",
@@ -59,7 +65,9 @@ export default function SignIn({ setUser, role }) {
 
       decodedUser.sub.role === "Customer" ? navigate("/") : navigate("/admin");
     } catch (error) {
-      console.log(error);
+      setError(error.response.data.error)
+      setIsLoading(false);
+      console.log(`error: ${JSON.stringify(error.response.data.error)}`);
     }
   };
 
@@ -69,15 +77,27 @@ export default function SignIn({ setUser, role }) {
       [e.target.name]: e.target.value,
     });
   };
-  
+
   if (isLoading) {
     return <Loading />;
   }
 
+  const AlertMessage = () => {
+    if (!error) return null;
+        return (
+      <Stack sx={{ width: "100%" }} spacing={2}>
+        <Alert severity="error" onClose={() => {setError("")}}>
+          <AlertTitle>Error</AlertTitle>
+          <strong>{error}</strong>
+        </Alert>
+      </Stack>
+    );
+  };
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      {error && <AlertMessage />}
       <Grid
         container
         alignItems="center"

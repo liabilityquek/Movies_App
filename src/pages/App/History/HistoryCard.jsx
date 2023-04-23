@@ -21,7 +21,7 @@ const ExpandMore = styled(IconButton)(({ theme }) => ({
   }),
 }));
 
-export default function HistoryCard({ movieData, onDelete }) {
+export default function HistoryCard({ movieData }) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
