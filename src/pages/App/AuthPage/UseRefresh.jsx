@@ -9,7 +9,7 @@ export function useRefresh() {
     console.log(`calling refreshToken`)
     try {
       const response = await axios.post(
-      `${process.env.SERVER}/refresh`,
+      `https://movies-app-python.onrender.com/refresh`,
         null,
         {
           headers: {
