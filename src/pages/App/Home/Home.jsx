@@ -56,7 +56,7 @@ export default function Home({ userName }) {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        setIsLoading(true);
+        // setIsLoading(true);
         const response = await axios.get(
           "https://api.themoviedb.org/3/search/movie",
           {
@@ -79,7 +79,7 @@ export default function Home({ userName }) {
         const newToken = await refreshToken();
         console.log("New token:", newToken);
         try {
-          setIsLoading(true);
+          // setIsLoading(true);
           const response = await axios.get(
             "https://api.themoviedb.org/3/search/movie",
             {

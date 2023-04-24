@@ -1,13 +1,13 @@
 import * as React from 'react';
-import FavouritesBar from './FavouritesBar';
 import ShowFavourites from './ShowFavourites';
 import Typography from "@mui/material/Typography";
+import Bar from '../../../components/Bar';
 
 export default function Favourites ({ userName }) {
     return(
         <>
 
-        <FavouritesBar />
+        <Bar />
         <Typography
         component="h1"
         variant="h5"

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import HistoryBar from "./HistoryBar";
 import axios from "axios";
 import HistoryGrid from "./HistoryGrid";
 import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
 import { useRefresh } from "../AuthPage/UseRefresh";
+import Bar from "../../../components/Bar";
 
 export default function History({ userName }) {
   const [showHistory, setShowHistory] = useState([]);
@@ -121,7 +121,7 @@ export default function History({ userName }) {
 
   return (
     <>
-      <HistoryBar />
+      <Bar />
       <Typography
         component="h1"
         variant="h5"

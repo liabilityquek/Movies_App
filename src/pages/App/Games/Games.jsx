@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import GameBar from "./GameBar";
 import GameGrid from "./GameGrid";
 import axios from "axios";
 import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
 import { useRefresh } from './../AuthPage/UseRefresh';
+import Bar from "../../../components/Bar";
 
 
 const Games = ({ userName }) => {
@@ -62,7 +62,7 @@ const Games = ({ userName }) => {
   
   return (
     <>
-      <GameBar />
+      <Bar />
       <Typography
         component="h1"
         variant="h5"

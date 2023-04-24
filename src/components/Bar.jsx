@@ -10,7 +10,9 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link as RouterLink } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { logout } from "../../../utilities/users-service";
+import { logout } from "../utilities/users-api";
+import { useLocation } from "react-router-dom";
+
 
 const theme = createTheme({
   palette: {
@@ -20,9 +22,9 @@ const theme = createTheme({
   },
 });
 
-export default function GameBar() {
+export default function Bar({ setUser }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
-
+  const location = useLocation();
   //  const GreyMenuItem = styled(MenuItem)(({ theme }) => ({
   //   backgroundColor: theme.palette.grey[400],
   // }));
@@ -37,7 +39,17 @@ export default function GameBar() {
 
   const handleLogout = () => {
     logout();
+    setUser(null);
   };
+
+  let currentRoute = "Account";
+  if (location.pathname === "/games"){
+    currentRoute = "Games";
+  }else if(location.pathname === "/favourites"){
+    currentRoute = "Favourites";
+  }else if(location.pathname === "/history"){
+    currentRoute = "Trending Search"
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -61,13 +73,7 @@ export default function GameBar() {
               onClose={handleClose}
               onClick={handleClose}
             >
-              <MenuItem
-                component={RouterLink}
-                to="/history"
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                Trending Search
-              </MenuItem>
+                {location.pathname !== '/favourites' && (
               <MenuItem
                 component={RouterLink}
                 to="/favourites"
@@ -75,6 +81,18 @@ export default function GameBar() {
               >
                 Favourites
               </MenuItem>
+                )}
+                {location.pathname !== '/games' && (
+              <MenuItem
+                component={RouterLink}
+                to="/games"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Games
+              </MenuItem>
+                )}
+
+                
               <MenuItem
                 component={RouterLink}
                 to="/"
@@ -82,6 +100,18 @@ export default function GameBar() {
               >
                 Search Movies
               </MenuItem>
+                
+
+                {location.pathname !== '/history' && (
+              <MenuItem
+                component={RouterLink}
+                to="/history"
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Trending Search
+              </MenuItem>
+                )}
+                {location.pathname !== '/account' && (
               <MenuItem
                 component={RouterLink}
                 to="/account"
@@ -89,6 +119,8 @@ export default function GameBar() {
               >
                 Account
               </MenuItem>
+                )}
+
               <MenuItem
                 component={RouterLink}
                 to="/login"
@@ -104,7 +136,7 @@ export default function GameBar() {
               component="div"
               sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
             >
-              Games
+              {currentRoute}
             </Typography>
           </Toolbar>
         </AppBar>

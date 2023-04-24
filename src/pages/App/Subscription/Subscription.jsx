@@ -3,13 +3,13 @@ import axios from "axios";
 import Loading from "./../../../components/Loading";
 import Typography from "@mui/material/Typography";
 import moment from "moment";
-import SubscriptionBar from "./SubscriptionBar";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import SubscriptionPlans from "./SubscriptionPlans";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import { useRefresh } from "../AuthPage/UseRefresh";
+import Bar from "../../../components/Bar";
 
 export default function Subscription({ userName, handleSubscriptionActive }) {
   const token = localStorage.getItem("token");
@@ -213,7 +213,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
 
   return (
     <>
-      <SubscriptionBar />
+      <Bar />
       {showAlert && AlertMessage(switchedPlan)}
       <Box
         display="flex"
