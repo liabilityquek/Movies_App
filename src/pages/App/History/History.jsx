@@ -16,7 +16,7 @@ export default function History({ userName }) {
   useEffect(() => {
     const showAllHistory = async () => {
       try {
-        const response = await axios.get(`${process.env.SERVER}/showhistory`, {
+        const response = await axios.get(`https://movies-app-python.onrender.com/showhistory`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +42,7 @@ export default function History({ userName }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            `${process.env.SERVER}/showhistory`,
+            `https://movies-app-python.onrender.com/showhistory`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,

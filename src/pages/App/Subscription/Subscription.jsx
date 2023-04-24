@@ -25,7 +25,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const fetchAccountDetails = useCallback(async () => {
     try {
       const response = await axios.get(
-        `${process.env.SERVER}/getsubscriptiondetails/${userId}`,
+        `https://movies-app-python.onrender.com/getsubscriptiondetails/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -50,7 +50,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       console.log("New token:", newToken);
       try {
         const response = await axios.get(
-          `${process.env.SERVER}/getsubscriptiondetails/${userId}`,
+          `https://movies-app-python.onrender.com/getsubscriptiondetails/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${newToken}`,
@@ -89,7 +89,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
     try {
       if (account.end_date === undefined) {
         const response = await axios.post(
-          `${process.env.SERVER}/cancelsubscription/${userId}`,
+          `https://movies-app-python.onrender.com/cancelsubscription/${userId}`,
           {},
           {
             headers: {
@@ -99,7 +99,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
         );
       } else if (account.end_date !== undefined) {
         const response = await axios.post(
-          `${process.env.SERVER}/reinstatesubscription/${userId}`,
+          `https://movies-app-python.onrender.com/reinstatesubscription/${userId}`,
           {},
           {
             headers: {
@@ -116,7 +116,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       try {
         if (account.end_date === undefined) {
           const response = await axios.post(
-            `${process.env.SERVER}/cancelsubscription/${userId}`,
+            `https://movies-app-python.onrender.com/cancelsubscription/${userId}`,
             {},
             {
               headers: {
@@ -126,7 +126,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
           );
         } else if (account.end_date !== undefined) {
           const response = await axios.post(
-            `${process.env.SERVER}/reinstatesubscription/${userId}`,
+            `https://movies-app-python.onrender.com/reinstatesubscription/${userId}`,
             {},
             {
               headers: {

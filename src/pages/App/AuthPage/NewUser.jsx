@@ -45,7 +45,7 @@ export default function NewUser() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `${process.env.SERVER}/create`,
+        `https://movies-app-python.onrender.com/create`,
         state
       );
       const data = response.data;

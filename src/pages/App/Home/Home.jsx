@@ -22,7 +22,7 @@ export default function Home({ userName }) {
   const appendSearchValue = async () => {
     try {
       const response = await axios.post(
-        `${process.env.SERVER}/history`,
+        `https://movies-app-python.onrender.com/history`,
         { searchValue: searchValue },
         {
           headers: {
@@ -38,7 +38,7 @@ export default function Home({ userName }) {
       console.log("New token:", newToken);
       try {
         const response = await axios.post(
-          `${process.env.SERVER}/history`,
+          `https://movies-app-python.onrender.com/history`,
           { searchValue: searchValue },
           {
             headers: {

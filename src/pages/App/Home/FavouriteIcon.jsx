@@ -13,7 +13,7 @@ export default function FavouriteIcon({ image }) {
     const checkIfMovieIsInsideFavourite = async () => {
       try {
         const response = await axios.get(
-          `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
+          `https://movies-app-python.onrender.com/showsinglefavourite/${userId}/${encodeURIComponent(
             image.title
           )}`,
           {
@@ -30,7 +30,7 @@ export default function FavouriteIcon({ image }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
+            `https://movies-app-python.onrender.com/showsinglefavourite/${userId}/${encodeURIComponent(
               image.title
             )}`,
             {
@@ -53,7 +53,7 @@ export default function FavouriteIcon({ image }) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `${process.env.SERVER}/favourite/${userId}`,
+          `https://movies-app-python.onrender.com/favourite/${userId}`,
           {
             title: image.title,
             year: image.release_date,
@@ -75,7 +75,7 @@ export default function FavouriteIcon({ image }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.post(
-            `${process.env.SERVER}/favourite/${userId}`,
+            `https://movies-app-python.onrender.com/favourite/${userId}`,
             {
               title: image.title,
               year: image.release_date,
@@ -98,7 +98,7 @@ export default function FavouriteIcon({ image }) {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
+          `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
             image.title
           )}`,
           {
@@ -115,7 +115,7 @@ export default function FavouriteIcon({ image }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.delete(
-            `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
+            `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
               image.title
             )}`,
             {

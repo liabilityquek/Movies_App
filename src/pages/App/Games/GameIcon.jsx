@@ -21,7 +21,7 @@ export default function GameIcon({
     const checkIfGameHasBeenLiked = async () => {
       try {
         const response = await axios.get(
-          `${process.env.SERVER}/checklikes/${games._id.$oid}/${userId}`,
+          `https://movies-app-python.onrender.com/checklikes/${games._id.$oid}/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -42,7 +42,7 @@ export default function GameIcon({
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            `${process.env.SERVER}/checklikes/${games._id.$oid}/${userId}`,
+            `https://movies-app-python.onrender.com/checklikes/${games._id.$oid}/${userId}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -70,7 +70,7 @@ export default function GameIcon({
     if (newFavoriteState) {
       try {
         const response = await axios.post(
-          `${process.env.SERVER}/newlikes/${userId}/${games._id.$oid}`,
+          `https://movies-app-python.onrender.com/newlikes/${userId}/${games._id.$oid}`,
           {},
           {
             headers: {
@@ -88,7 +88,7 @@ export default function GameIcon({
         console.log("New token:", newToken);
         try {
           const response = await axios.post(
-            `${process.env.SERVER}/newlikes/${userId}/${games._id.$oid}`,
+            `https://movies-app-python.onrender.com/newlikes/${userId}/${games._id.$oid}`,
             {},
             {
               headers: {
@@ -106,7 +106,7 @@ export default function GameIcon({
     } else {
       try {
         const response = await axios.delete(
-          `${process.env.SERVER}/deletelikes/${userId}/${games._id.$oid}`,
+          `https://movies-app-python.onrender.com/deletelikes/${userId}/${games._id.$oid}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -123,7 +123,7 @@ export default function GameIcon({
         console.log("New token:", newToken);
         try {
           const response = await axios.delete(
-            `${process.env.SERVER}/deletelikes/${userId}/${games._id.$oid}`,
+            `https://movies-app-python.onrender.com/deletelikes/${userId}/${games._id.$oid}`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,

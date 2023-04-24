@@ -13,7 +13,7 @@ export default function HistoryIcon({ movieData }) {
     const checkIfMovieIsInsideFavourite = async () => {
       try {
         const response = await axios.get(
-          `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
+          `https://movies-app-python.onrender.comVER}/showsinglefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
@@ -29,7 +29,7 @@ export default function HistoryIcon({ movieData }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
+            `https://movies-app-python.onrender.comVER}/showsinglefavourite/${userId}/${encodeURIComponent(
               movieData.title
             )}`,
             {
@@ -52,7 +52,7 @@ export default function HistoryIcon({ movieData }) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `${process.env.SERVER}/favourite/${userId}`,
+          `https://movies-app-python.onrender.comVER}/favourite/${userId}`,
           {
             title: movieData.title,
             year: movieData.release_date,
@@ -73,7 +73,7 @@ export default function HistoryIcon({ movieData }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.post(
-            `${process.env.SERVER}/favourite/${userId}`,
+            `https://movies-app-python.onrender.comVER}/favourite/${userId}`,
             {
               title: movieData.title,
               year: movieData.release_date,
@@ -96,7 +96,7 @@ export default function HistoryIcon({ movieData }) {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
+          `https://movies-app-python.onrender.comVER}/deletefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
@@ -112,7 +112,7 @@ export default function HistoryIcon({ movieData }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.delete(
-            `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
+            `https://movies-app-python.onrender.comVER}/deletefavourite/${userId}/${encodeURIComponent(
               movieData.title
             )}`,
             {

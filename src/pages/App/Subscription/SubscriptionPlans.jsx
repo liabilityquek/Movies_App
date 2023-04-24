@@ -43,7 +43,7 @@ function PricingContent({
   const handleSelectPlan = async (plan) => {
     try {
       const response = await axios.post(
-        `${process.env.SERVER}/amendsubscription/${userId}`,
+        `https://movies-app-python.onrender.com/amendsubscription/${userId}`,
         { plan },
         {
           headers: {

@@ -42,7 +42,7 @@ export default function SignIn({ setUser, role }) {
     setError("");
     try {
       const response = await axios.post(
-        `${process.env.SERVER}/login`,
+        `https://movies-app-python.onrender.com/login`,
         loginTry
       );
       const data = response.data;
