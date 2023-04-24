@@ -36,16 +36,14 @@ export default function CheckSubscriptionStatus({ setSubscriptionActive }) {
   }, [token, userId]);
 
   useEffect(() => {
-    if (account && account.end_date) {
+    if (account) {
       const isEndDate = moment(account.end_date).isSameOrBefore(moment());
-      setSubscriptionActive(!isEndDate);
-      console.log(`isEndDte: ${isEndDate}`)
-      if (isEndDate) {
-        console.log(`isEndDte: ${isEndDate}`)
-        navigate("/account");
-      }
+      const isTrialPeriod = moment(account.trial_end).isSameOrAfter(moment());
+      setSubscriptionActive(!isEndDate || isTrialPeriod);
+      console.log(`isEndDate: ${isEndDate}`)
+      console.log(`isTrialPeriod: ${isTrialPeriod}`)
     }
-  }, [account, navigate, setSubscriptionActive]);
+  }, [account, setSubscriptionActive]);
 
   
   useEffect(() => {
