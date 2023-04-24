@@ -22,7 +22,7 @@ export default function Home({ userName }) {
   const appendSearchValue = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/history",
+        `${process.env.SERVER}/history`,
         { searchValue: searchValue },
         {
           headers: {
@@ -38,7 +38,7 @@ export default function Home({ userName }) {
       console.log("New token:", newToken);
       try {
         const response = await axios.post(
-          "http://localhost:5000/history",
+          `${process.env.SERVER}/history`,
           { searchValue: searchValue },
           {
             headers: {
@@ -61,7 +61,7 @@ export default function Home({ userName }) {
           "https://api.themoviedb.org/3/search/movie",
           {
             params: {
-              api_key: "8c6afdd4f8e60448372b995095920f03",
+              api_key: process.env.REACT_APP_MOVIES_API,
               query: searchValue,
             },
             headers: {
@@ -84,7 +84,7 @@ export default function Home({ userName }) {
             "https://api.themoviedb.org/3/search/movie",
             {
               params: {
-                api_key: "8c6afdd4f8e60448372b995095920f03",
+                api_key: process.env.REACT_APP_MOVIES_API,
                 query: searchValue,
               },
               headers: {

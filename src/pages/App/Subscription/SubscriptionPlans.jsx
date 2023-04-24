@@ -43,7 +43,7 @@ function PricingContent({
   const handleSelectPlan = async (plan) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/amendsubscription/${userId}`,
+        `${process.env.SERVER}/amendsubscription/${userId}`,
         { plan },
         {
           headers: {

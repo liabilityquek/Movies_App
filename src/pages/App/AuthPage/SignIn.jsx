@@ -42,7 +42,7 @@ export default function SignIn({ setUser, role }) {
     setError("");
     try {
       const response = await axios.post(
-        "http://localhost:5000/login",
+        `${process.env.SERVER}/login`,
         loginTry
       );
       const data = response.data;

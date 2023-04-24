@@ -16,7 +16,7 @@ export default function History({ userName }) {
   useEffect(() => {
     const showAllHistory = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/showhistory", {
+        const response = await axios.get(`${process.env.SERVER}/showhistory`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +42,7 @@ export default function History({ userName }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            "http://localhost:5000/showhistory",
+            `${process.env.SERVER}/showhistory`,
             {
               headers: {
                 Authorization: `Bearer ${newToken}`,
@@ -78,7 +78,7 @@ export default function History({ userName }) {
         "https://api.themoviedb.org/3/search/movie",
         {
           params: {
-            api_key: "8c6afdd4f8e60448372b995095920f03",
+            api_key: process.env.REACT_APP_MOVIES_API,
             query: element,
           },
           headers: {
@@ -98,7 +98,7 @@ export default function History({ userName }) {
           "https://api.themoviedb.org/3/search/movie",
           {
             params: {
-              api_key: "8c6afdd4f8e60448372b995095920f03",
+              api_key: process.env.REACT_APP_MOVIES_API,
               query: element,
             },
             headers: {

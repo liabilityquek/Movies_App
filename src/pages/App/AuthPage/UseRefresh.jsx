@@ -9,7 +9,7 @@ export function useRefresh() {
     console.log(`calling refreshToken`)
     try {
       const response = await axios.post(
-        "http://localhost:5000/refresh",
+      `${process.env.SERVER}/refresh`,
         null,
         {
           headers: {

@@ -36,7 +36,7 @@ export default function Forget() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/reset",
+        `${process.env.SERVER}/reset`,
         state
       );
       const data = response.data;

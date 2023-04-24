@@ -45,7 +45,7 @@ export default function NewUser() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/create",
+        `${process.env.SERVER}/create`,
         state
       );
       const data = response.data;

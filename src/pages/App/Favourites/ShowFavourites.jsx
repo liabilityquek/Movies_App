@@ -34,7 +34,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
     
     try {
       const response = await axios.get(
-        `http://localhost:5000/showfavourite/${userId}`,
+        `${process.env.SERVER}/showfavourite/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
       console.log("New token:", newToken);
       try {
         const response = await axios.get(
-          `http://localhost:5000/showfavourite/${userId}`,
+          `${process.env.SERVER}/showfavourite/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${newToken}`,
@@ -70,7 +70,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
     
     try {
       const response = await axios.delete(
-        `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+        `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
           title
         )}`,
         {
@@ -90,7 +90,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
       console.log("New token:", newToken);
       try {
         const response = await axios.delete(
-          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+          `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
             title
           )}`,
           {

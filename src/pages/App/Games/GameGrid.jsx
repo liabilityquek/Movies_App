@@ -8,6 +8,7 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import GameCard from "./GameCard";
 import Loading from "../../../components/Loading";
+import Typography from "@mui/material/Typography";
 
 export default function GameGrid({ itemsPerPage, games, onGameUpdated, isLoading }) {
   const [page, setPage] = useState(1);

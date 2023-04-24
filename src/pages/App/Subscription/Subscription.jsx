@@ -25,7 +25,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const fetchAccountDetails = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/getsubscriptiondetails/${userId}`,
+        `${process.env.SERVER}/getsubscriptiondetails/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -50,7 +50,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       console.log("New token:", newToken);
       try {
         const response = await axios.get(
-          `http://localhost:5000/getsubscriptiondetails/${userId}`,
+          `${process.env.SERVER}/getsubscriptiondetails/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${newToken}`,
@@ -89,7 +89,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
     try {
       if (account.end_date === undefined) {
         const response = await axios.post(
-          `http://localhost:5000/cancelsubscription/${userId}`,
+          `${process.env.SERVER}/cancelsubscription/${userId}`,
           {},
           {
             headers: {
@@ -99,7 +99,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
         );
       } else if (account.end_date !== undefined) {
         const response = await axios.post(
-          `http://localhost:5000/reinstatesubscription/${userId}`,
+          `${process.env.SERVER}/reinstatesubscription/${userId}`,
           {},
           {
             headers: {
@@ -116,7 +116,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       try {
         if (account.end_date === undefined) {
           const response = await axios.post(
-            `http://localhost:5000/cancelsubscription/${userId}`,
+            `${process.env.SERVER}/cancelsubscription/${userId}`,
             {},
             {
               headers: {
@@ -126,7 +126,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
           );
         } else if (account.end_date !== undefined) {
           const response = await axios.post(
-            `http://localhost:5000/reinstatesubscription/${userId}`,
+            `${process.env.SERVER}/reinstatesubscription/${userId}`,
             {},
             {
               headers: {

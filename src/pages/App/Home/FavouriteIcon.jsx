@@ -13,7 +13,7 @@ export default function FavouriteIcon({ image }) {
     const checkIfMovieIsInsideFavourite = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
+          `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
             image.title
           )}`,
           {
@@ -30,7 +30,7 @@ export default function FavouriteIcon({ image }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
+            `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
               image.title
             )}`,
             {
@@ -53,7 +53,7 @@ export default function FavouriteIcon({ image }) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `http://localhost:5000/favourite/${userId}`,
+          `${process.env.SERVER}/favourite/${userId}`,
           {
             title: image.title,
             year: image.release_date,
@@ -75,7 +75,7 @@ export default function FavouriteIcon({ image }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.post(
-            `http://localhost:5000/favourite/${userId}`,
+            `${process.env.SERVER}/favourite/${userId}`,
             {
               title: image.title,
               year: image.release_date,
@@ -98,7 +98,7 @@ export default function FavouriteIcon({ image }) {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+          `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
             image.title
           )}`,
           {
@@ -115,7 +115,7 @@ export default function FavouriteIcon({ image }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.delete(
-            `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+            `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
               image.title
             )}`,
             {

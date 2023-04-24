@@ -17,7 +17,7 @@ export default function CheckSubscriptionStatus({ setSubscriptionActive }) {
   const fetchAccountDetails = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/getsubscriptiondetails/${userId}`,
+        `${process.env.SERVER}/getsubscriptiondetails/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

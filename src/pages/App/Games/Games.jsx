@@ -19,7 +19,7 @@ const Games = ({ userName }) => {
   const fetchGames = useCallback(async () => {
 
     try {
-      const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
+      const response = await axios.get(`${process.env.SERVER}/showgames/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -33,7 +33,7 @@ const Games = ({ userName }) => {
         const newToken = await refreshToken();
         console.log("New token:", newToken);
         try {
-          const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
+          const response = await axios.get(`${process.env.SERVER}/showgames/${userId}`, {
             headers: {
               Authorization: `Bearer ${newToken}`,
             },

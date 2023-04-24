@@ -13,7 +13,7 @@ export default function HistoryIcon({ movieData }) {
     const checkIfMovieIsInsideFavourite = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
+          `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
@@ -29,7 +29,7 @@ export default function HistoryIcon({ movieData }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.get(
-            `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
+            `${process.env.SERVER}/showsinglefavourite/${userId}/${encodeURIComponent(
               movieData.title
             )}`,
             {
@@ -52,7 +52,7 @@ export default function HistoryIcon({ movieData }) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `http://localhost:5000/favourite/${userId}`,
+          `${process.env.SERVER}/favourite/${userId}`,
           {
             title: movieData.title,
             year: movieData.release_date,
@@ -73,7 +73,7 @@ export default function HistoryIcon({ movieData }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.post(
-            `http://localhost:5000/favourite/${userId}`,
+            `${process.env.SERVER}/favourite/${userId}`,
             {
               title: movieData.title,
               year: movieData.release_date,
@@ -96,7 +96,7 @@ export default function HistoryIcon({ movieData }) {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+          `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
@@ -112,7 +112,7 @@ export default function HistoryIcon({ movieData }) {
         console.log("New token:", newToken);
         try {
           const response = await axios.delete(
-            `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+            `${process.env.SERVER}/deletefavourite/${userId}/${encodeURIComponent(
               movieData.title
             )}`,
             {
