@@ -17,7 +17,7 @@ export default function CheckSubscriptionStatus({ setSubscriptionActive }) {
   const fetchAccountDetails = async () => {
     try {
       const response = await axios.get(
-        `${process.env.SERVER}/getsubscriptiondetails/${userId}`,
+        `https://movies-app-python.onrender.com/getsubscriptiondetails/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
