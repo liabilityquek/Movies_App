@@ -51,7 +51,7 @@ export default function FavouritesCard({ f, onDelete }) {
         <CardMedia
           component="img"
           height="300"
-          image={f.image_url}
+          image={f.image_url ? f.image_url : "../../../../images/image not available.jpg"}
           alt={f.title}
         />
         <CardContent>
