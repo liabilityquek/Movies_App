@@ -78,7 +78,6 @@ const App = () => {
               element={
                 <Home
                   userName={userName}
-                  subscriptionActive={subscriptionActive}
                 />
               }
             />
@@ -87,7 +86,6 @@ const App = () => {
               element={
                 <History
                   userName={userName}
-                  subscriptionActive={subscriptionActive}
                 />
               }
             />
@@ -96,7 +94,6 @@ const App = () => {
               element={
                 <Favourites
                   userName={userName}
-                  subscriptionActive={subscriptionActive}
 
                 />
               }
@@ -106,7 +103,6 @@ const App = () => {
               element={
                 <Games
                   userName={userName}
-                  subscriptionActive={subscriptionActive}
                 />
               }
             />
@@ -119,7 +115,6 @@ const App = () => {
                 <Subscription
                   userName={userName}
                   handleSubscriptionActive={handleSubscriptionActive}
-                  subscriptionActive={subscriptionActive}
                 />
               }
             />
@@ -139,16 +134,6 @@ const App = () => {
             subscriptionActive={false}
           />
           <Routes>
-            {/* <Route
-              path="/account"
-              element={
-                <Subscription
-                  userName={userName}
-                  handleSubscriptionActive={handleSubscriptionActive}
-                  subscriptionActive={false}
-                />
-              }
-            /> */}
             <Route
               path="/*"
               element={

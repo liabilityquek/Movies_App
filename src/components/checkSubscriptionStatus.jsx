@@ -34,7 +34,7 @@ export default function CheckSubscriptionStatus({ setSubscriptionActive }) {
 
   useEffect(() => {
     fetchAccountDetails();
-  }, [token, userId]);
+  }, [token, userId, location.pathname]);
 
   useEffect(() => {
     if (account) {
@@ -46,10 +46,6 @@ export default function CheckSubscriptionStatus({ setSubscriptionActive }) {
     }
   }, [account, setSubscriptionActive]);
 
-  // Listen for route changes
-  useEffect(() => {
-    fetchAccountDetails();
-  }, [location.pathname]);
 
   useEffect(() => {
     if (token === null || token === undefined) {
