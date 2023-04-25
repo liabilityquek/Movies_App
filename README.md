@@ -1,8 +1,3 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/home.png" alt="Patient Management System"></a>
-</p>
-
 <h3 align="center">Onlymovies</h3>
 
 ---
