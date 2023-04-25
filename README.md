@@ -17,14 +17,15 @@ Click <a href="https://github.com/liabilityquek/Movies_App_python">here</a> to v
 The application is deployed on Vercel. You would need to <a href="https://onlymovies-umber.vercel.app">create</a> an account to access the application.
 The backend is deployed on <a href="https://movies-app-python.onrender.com">Render</a>.
 
-
 ## Features
+
 <li>CRUD model on favourites, likes, game and subscription</li>
 <li>Using RESTFul Routes</li>
 <li>Error validation on both the client and the backend server</li>
 <li>Adopt the MVC approach; Model, View and Controller</li>
 
 ## Technologies & Tools Used
+
 <li><a href="https://github.com/liabilityquek/Movies_App_python">Flask</a></li>
 <li>Javascript</li>
 <li>Material UI</li>
@@ -38,6 +39,7 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 <br>
 
 ## Wireframe</a>
+
 <li>Login form</li>
 <li>Sign Up Page</li>
 <li>Forget Password</li>
@@ -51,6 +53,7 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 <br>
 
 ## User Stories</a>
+
 <li>As a new user, I want to sign up for the application using my name, email, and password, so that I can access the movie recommendation feature.</li>
 <li>As an existing user, I want to log in to the application with my email and password, so that I can access my personalized movie favourites.</li>
 <li>As a logged-in user, I want to search for a movie using keywords or phrases, so that the application can provide relevant movie recommendations.</li>
@@ -141,6 +144,7 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 </p>
 
 ## User - Admin</a>
+
  <p align="center">
   <a href="" rel="noopener">
  <img style="max-width: 100%;" src="/images/admin.png" alt="admin page"></a>
@@ -153,7 +157,9 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 <br>
 
 ## Deliverables Timeline
+
 <strong><u>Day 1:</u></strong>
+
 <li>Writing up user stories, wireframe and data model</li>
 <li>Setting up Flask</li>
 <li>Reading Flask documentation</li>
@@ -196,7 +202,9 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 <br>
 
 ## Key Takeaways
+
 These are key takeaways when working on the project:
+
 <li>Separate key requirements of the project and "nice to have"</li>
 <li>Research early when working on new framework</li>
 <li>Assign meaningful name to functions for easy readability</li>
@@ -204,167 +212,337 @@ These are key takeaways when working on the project:
 
 <br>
 
-<strong><u>Patient Data Model Validation:</u></strong>
-```js
-const patientSchema = new Schema(
-  {
-    nricfin: {
-      type: String,
-      unique: true,
-      required: true,
-      match: /^[0-9]{4}[A-Za-z]{1}$/,
-      minlength: 5,
-      message: "NRIC/FIN must be 5 characters long",
-    },
-    name: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    contactno: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    dob: {
-      type: Date,
-      required: true,
-    },
-    gender: {
-      type: String,
-      required: true,
-      enum: ["MALE", "FEMALE"],
-      validate: {
-        validator: function (v) {
-          return ["MALE", "FEMALE"].includes(v);
-        },
-        message: "Invalid gender type",
-      },
-    },
-    nationality: {
-      type: String,
-      required: true,
-      enum: ["SINGAPOREAN", "WORK PERMIT", "PR", "S-PASS", "E-PASS"],
-      validate: {
-        validator: function (v) {
-          return [
-            "SINGAPOREAN",
-            "WORK PERMIT",
-            "PR",
-            "S-PASS",
-            "E-PASS",
-          ].includes(v);
-        },
-        message: "Invalid Nationality",
-      },
-    },
-    streetaddress: {
-      type: String,
-      required: true,
-    },
-    postalcode: {
-      type: String,
-      required: true,
-      validate: {
-        validator: function (v) {
-          return (v.toString().length = 6);
-        },
-        message: "Postal Code must be 6 digits long",
-      },
-    },
-    unitno: {
-      type: String,
-      required: true,
-    },
-    drugallergies: {
-      type: [String],
-      required: true,
-    },
-    vaccination: {
-      type: String,
-      required: true,
-      enum: ["YES", "NO"],
-      validate: {
-        validator: function (v) {
-          return ["YES", "NO"].includes(v);
-        },
-        message: "Invalid option",
-      },
-    },
-    vaccinationtype: {
-      type: String,
-      enum: [" ", "PFIZER", "MODERNA", "NOVAVAX", "SINOVAC"],
-      validate: {
-        validator: function (v) {
-          return [" ", "PFIZER", "MODERNA", "NOVAVAX", "SINOVAC"].includes(v);
-        },
-        message: "Invalid vaccination type",
-      },
-    },
-
-    log: [patientLogSchema],
-  },
-
-```
-<br>
-
-<strong><u>Mongoose Validation Error in controller to view:</u></strong>
+<strong><u>Using a useCallback hook to memorize a function(which in this case would be the onGameUpdated), preventing it from being re-created on every render of a component.</u></strong>
 
 ```js
-const createPatient = async (req, res) => {
+//Parent Component
+const Games = ({ userName }) => {
+  const [games, setGames] = useState([]);
+  const token = localStorage.getItem("token");
+  const id = JSON.parse(window.atob(token.split(".")[1]));
+  const userId = id.sub.id;
+  const [isLoading, setIsLoading] = useState(true);
+  const { refreshToken } = useRefresh();
 
-  try {
+  const fetchGames = useCallback(async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/showgames/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    if (req.body.drugallergies) {
-      req.body.drugallergies = req.body.drugallergies.split(/\s*,\s*/);
+      setGames(response.data.games);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      // await refreshToken()
+      const newToken = await refreshToken();
+      console.log("New token:", newToken);
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/showgames/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${newToken}`,
+            },
+          }
+        );
+
+        setGames(response.data.games);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(true);
+      }
     }
+  }, [token, userId, refreshToken]);
 
-    const patient = new Patient({
-      ...req.body,
-    });
-    const newPatient = await patient.save(); //update
-    console.log(`newPatient: ${newPatient}`);
-    res.redirect("/patients");
-  } 
-  catch (err) {
-    if (err.code === 11000) {
-      console.log(`Duplicate error: ${err}`);
-      res.render("patients/error", { message: "Duplicate record!" });
-    } else if (err.name === "ValidationError") {
-      const errors = Object.values(err.errors).map((e) => e.message);
-      console.log(`Data Model Errors: ${errors}`);
-      res.render("patients/error", { message: errors });
-    } else {
-      console.log(err);
-      res.render("patients/error", { message: err });
-    }
+  const handleGameUpdated = () => {
+    fetchGames();
+  };
+
+  useEffect(() => {
+    fetchGames();
+  }, []);
+
+  if (isLoading) {
+    return <Loading />;
   }
+  return (
+    <>
+      <Bar />
+      <Typography
+        component="h1"
+        variant="h5"
+        align="center"
+        color="text.primary"
+        gutterBottom
+        sx={{ color: "white", marginTop: 4 }}
+      >
+        Welcome back, {userName}
+      </Typography>
+      <GameGrid
+        itemsPerPage={9}
+        games={games}
+        onGameUpdated={handleGameUpdated}
+      />
+    </>
+  );
 };
+
+export default Games;
+
+//Child Component
+
+export default function GameGrid({ itemsPerPage, games, onGameUpdated, isLoading }) {
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState("");
+  const [likesCount, setLikesCount] = useState([]);
+
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
+
+  const sortHandleChange = (e) => {
+    setSort(e.target.value);
+  };
+
+  useEffect(() => {
+    setLikesCount(games.map(game => game.likes ? game.likes.length : 0));
+  }, [games]);
+
+  const handleLikeChange = (index, increment) => {
+    setLikesCount(likesCount.map((count, i) => i === index ? count + increment : count));
+
+  };
+
+  const sortOption = () => {
+    return games
+      .map((game, index) => ({ ...game, likesCount: likesCount[index] }))
+      .sort((a, b) => {
+        switch (sort) {
+          case "title":
+            return a.title.localeCompare(b.title, { ignorePunctuation: true });
+          case "likes":
+            return a.likesCount - b.likesCount;
+          default:
+            return 0;
+        }
+      });
+  };
+
+
+  return (
+    <div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Box
+            marginRight={4}
+            sx={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+              <InputLabel
+                id="sort-label"
+                sx={{ "&.MuiInputLabel-root": { color: "white" } }}
+              >
+                Sort by
+              </InputLabel>
+              <Select
+                labelId="sort-label"
+                value={sort}
+                onChange={sortHandleChange}
+                label="Sort by"
+                sx={{ bgcolor: "grey", borderRadius: 1 }}
+              >
+                <MenuItem value="title">Title</MenuItem>
+                <MenuItem value="likes">Likes</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          <Grid container spacing={2}>
+            {sortOption()
+              .slice((page - 1) * itemsPerPage, page * itemsPerPage)
+              .map((game, index) => {
+                console.log(
+                  `likes in GameGrid for game ${game.title}: ${game.likesCount}, ${JSON.stringify(game, null, 2)}`
+                );
+                return (
+                  <Grid item xs={12} sm={6} md={4} key={index}>
+                    <GameCard
+                      games={game}
+                      likes={game.likesCount}
+                      handleLikeChange={(increment) =>
+                        handleLikeChange(games.indexOf(game), increment)
+                      }
+                      onGameUpdated={onGameUpdated}
+                    />
+                  </Grid>
+                );
+              })}
+          </Grid>
+
+          <Pagination
+            count={Math.ceil(games.length / itemsPerPage)}
+            page={page}
+            onChange={handleChange}
+            sx={{
+              mt: 4,
+              display: "flex",
+              justifyContent: "center",
+              "& .MuiPaginationItem-root": {
+                color: "white",
+              },
+            }}
+          />
+          {games.length === 0 && (
+            <Typography
+              variant="h6"
+              color="white"
+              sx={{ mt: 4, textAlign: "center" }}
+            >
+              Nothing to show..
+            </Typography>
+          )}
+        </>
+      )}
+    </div>
+  );
+
+}
+
 ```
+
 <br>
 
-<strong><u>Validation Error in EJS:</u></strong>
+<strong><u>Using Debounce to set a timeout of 1s in my search bar:</u></strong>
 
-```html
+```js
+import { DebounceInput } from "react-debounce-input";
+<DebounceInput
+  placeholder="Search…"
+  inputProps={{ "aria-label": "search" }}
+  onChange={handleSearch}
+  debounceTimeout={1000}
+  element={StyledInputBase}
+/>;
+```
 
-<div>
-      <input type="text" name="nricfin" required placeholder=" " onkeyup="this.value = this.value.toUpperCase();"
-        pattern="[0-9]{4}[A-Za-z]{1}" required />
-      <label for="nricfin">NRIC/FIN Example: 1234A</label>
-      <div class="requirements">
-        Please enter 4 digits followed by 1 alphabet.
-      </div>
-    </div>
+<br>
 
-    <div>
-      <input type="text" name="name" required placeholder=" " onkeyup="this.value = this.value.toUpperCase();"
-        required />
-      <label for="name">Name</label>
+<strong><u>Refreshing JWT Token using Flask</u></strong>
 
-    </div>
+```py
+# app.py
+@app.route('/refresh', methods=['POST'])
+@jwt_required(refresh=True)
+def refresh_token():
+    return loginController.refresh()
+
+# loginController
+
+def login(request, bcrypt):
+    try:
+
+        email = request.json.get('email')
+        password = request.json.get('password')
+        selected_role = request.json.get('role')
+
+
+        if len(password) < 3:
+            raise ValueError("Password too short")
+
+        user = User.objects(email=email).first()
+        if not user:
+            raise ValueError("Login Credentials does not exist")
+
+        if user.role != selected_role:
+            raise ValueError("Invalid role for this email")
+
+        if bcrypt.check_password_hash(user.password, password):
+            # Set the expiration time to 30 minutes
+            token = create_access_token(identity={"email": email, "role": user.role, "id": str(user.id), "name": user.name}, expires_delta=timedelta(minutes=30))
+            refresh_token = create_refresh_token(identity={"email": email, "role": user.role, "id": str(user.id), "name": user.name})
+            print("Generated access_token:", token)
+            print("Generated refresh_token:", refresh_token)
+            return jsonify({"token": token, "customer": user, "refresh_token": refresh_token}), 200
+
+    except ValueError as ve:
+        response = jsonify({"error": str(ve)})
+        response.status_code = 400
+        return response
+
+def refresh():
+    current_user = get_jwt_identity()
+    token = create_access_token(identity=current_user, expires_delta=timedelta(minutes=15), fresh=False)
+    print("Generated token in refresh():", token)
+    return jsonify({"token": token}), 200
+```
+
+<strong><u>Configuring refreshing JWT Token in React</u></strong>
+
+```js
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+export function useRefresh() {
+  const [user, setUser] = useState(null);
+
+  const refreshToken = async () => {
+    console.log(`calling refreshToken`);
+    try {
+      const response = await axios.post(
+        `https://movies-app-python.onrender.com/refresh`,
+        null,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("refresh_token")}`,
+          },
+        }
+      );
+
+      localStorage.setItem("token", response.data.token);
+
+      return response.data.token;
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      return null;
+    }
+  };
+
+  useEffect(() => {
+    const checkTokenExpiration = async () => {
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        try {
+          const decodedToken = JSON.parse(window.atob(token.split(".")[1]));
+
+          if (decodedToken.exp * 1000 < Date.now()) {
+            await refreshToken();
+          }
+        } catch (error) {
+          console.error("error refreshing token: ", error);
+        }
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
+
+  return { user, setUser, refreshToken };
+}
 ```
 
 ## Future Enhancements
+
 <p>As this application is part of a project submission, there would not be an future amendments made to this.</p>However, if there were any future enhancements to be made, these would be the following changes:</p>
 <li>Insert a Stripe payment gateway</li>
 <li>Using OAuth</li>
@@ -390,9 +568,10 @@ Various sources which I have seek guidance from:
 <br>
 
 ## Application Asset Attribution
+
 The CSS in this project does not belong to me. All rights belong to the original artists and owners. Below are the links to the CSS used in this project:
+
 <li><a href=https://icons8.com/icons/set/movie>Movie Icon</a>
 </li>
 <li><a href=https://www.freeiconspng.com/downloadimg/23500>Not available image</a>
 </li>
-
