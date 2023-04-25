@@ -62,6 +62,14 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 <li>As a logged-in admin user, I want to log out of the application, so that my account is secure when I am not using it.</li>
 <br>
 
+## Data Model</a>
+
+<br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/data model.png" alt="data model"></a>
+</p>
+
 ## Login/Forget/Reset</a>
 
 <br>
