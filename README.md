@@ -15,7 +15,7 @@ Click <a href="https://github.com/liabilityquek/Movies_App_python">here</a> to v
 
 ## Timeframe
 
-7 days
+8 days
 
 ## Deployment
 
@@ -151,40 +151,53 @@ The backend is deployed on <a href="https://movies-app-python.onrender.com">Rend
 
 ## Deliverables Timeline
 <strong><u>Day 1:</u></strong>
-<li>Working and drafting on the routes layout</li>
-<li>Creating the data models</li>
+<li>Writing up user stories, wireframe and data model</li>
+<li>Setting up Flask</li>
+<li>Reading Flask documentation</li>
 <br>
 <strong><u>Day 2:</u></strong>
-<li>Setting up the routes; MVC approach</li>
-<li>Connecting the controller with model</li>
-<li>Inserting validation in the data model</li>
-<li>Doing testing on the front end</li>
+<li>Setting up Flask</li>
+<li>Reading Flask documentation</li>
 <br>
 <strong><u>Day 3:</u></strong>
 <br>
-<li>Debugging errors on the routes, controller and view</li>
-<li>Doing testing on the front end</li>
-<li>Error validation on the front end</li>
+<li></li>
+<li>Writing up the data model and routes in python</li>
+<li>Testing backend using Postman</li>
+<li>Working on React components</li>
 <br>
 <strong><u>Day 4:</u></strong>
 <br>
-<li>Unit testing using Jest</li>
-<li>CSS structure</li>
-<li>EJS structure</li>
+<li>Working on React components</li>
 <br>
 <strong><u>Day 5:</u></strong>
 <br>
+<li>Working on React components</li>
+<br>
+<br>
+<strong><u>Day 6:</u></strong>
+<br>
+<li>Working on React components</li>
+<br>
+<br>
+<strong><u>Day 7:</u></strong>
+<br>
+<li>Working on React components</li>
+<li>Re-work on data model to cater for subscription</li>
+<li>Working on subscription dates</li>
+<br>
+<strong><u>Day 8:</u></strong>
+<br>
+<li>Working on React components</li>
 <li>Wrap up</li>
 <br>
 
 ## Key Takeaways
 These are key takeaways when working on the project:
-<li>Drafting up data models requirements and how to insert some validation</li>
-<li>Making it a habit to comment the codes for easy reference and readability</li>
-<li>Writing mulitple console.log syntax to ensure that the function or codes are returning the correct values</li>
+<li>Separate key requirements of the project and "nice to have"</li>
+<li>Research early when working on new framework</li>
 <li>Assign meaningful name to functions for easy readability</li>
 <li>Using the MVC approach to keep codes organised</li>
-<li>Getting the RESTful routes right in the first place is crucial</li>
 
 <br>
 
@@ -368,6 +381,8 @@ Various sources which I have seek guidance from:
 <li><a href=https://flask-cors.readthedocs.io/en/latest>Configuring Flask CORS</a>
 </li>
 <li><a href=https://rest-apis-flask.teclado.com/docs/flask_jwt_extended/token_refreshing_flask_jwt_extended>Token resfreshing Flask JWT Extended</a>
+</li>
+<li><a href=https://developers.themoviedb.org/3/getting-started/introduction>External API for movies database</a>
 </li>
 <br>
 
