@@ -61,7 +61,7 @@ export default function Home({ userName }) {
           "https://api.themoviedb.org/3/search/movie",
           {
             params: {
-              api_key: process.env.REACT_APP_MOVIES_API,
+              api_key: "8c6afdd4f8e60448372b995095920f03",
               query: searchValue,
             },
             headers: {
@@ -84,7 +84,7 @@ export default function Home({ userName }) {
             "https://api.themoviedb.org/3/search/movie",
             {
               params: {
-                api_key: process.env.REACT_APP_MOVIES_API,
+                api_key: "8c6afdd4f8e60448372b995095920f03",
                 query: searchValue,
               },
               headers: {

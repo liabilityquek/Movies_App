@@ -3,133 +3,149 @@
  <img style="max-width: 100%;" src="/image/home.png" alt="Patient Management System"></a>
 </p>
 
-<h3 align="center">Patient Management System</h3>
+<h3 align="center">Onlymovies</h3>
 
 ---
 
 ## Description
 
-The Patient Managment System (PMS) is a simple application to store the patient details, generate queue number and view doctor's log tagged to the respective patient. This project utilise MongoDB database and has 3 data models; users (doctors and nurses), patient and queue number. It also uses cookies session for authentication of users.
+A user-friendly movies web application enables users to effortlessly search for and view films. It's important to note that the actual playback feature is unavailable, as the movies are sourced from an external API. Users can efficiently filter movies by title, release date, and rating while also having the ability to like or unlike their preferred films. In addition to movie exploration, this application offers a variety of interactive games for leisurely entertainment, providing an engaging user experience.
+
+Click <a href="https://github.com/liabilityquek/Movies_App_python">here</a> to view the backend repo.
 
 ## Timeframe
 
-5 days
+7 days
 
 ## Deployment
 
-The application is deployed on Cyclic. You would need to <a href="https://cockatoo-sun-hat.cyclic.app/signup">create</a> an account to access the application.
+The application is deployed on Vercel. You would need to <a href="https://onlymovies-umber.vercel.app">create</a> an account to access the application.
+The backend is deployed on <a href="https://movies-app-python.onrender.com">Render</a>.
+
 
 ## Features
-<li>CRUD model on patients, queue nubmer and user</li>
+<li>CRUD model on favourites, likes, game and subscription</li>
 <li>Using RESTFul Routes</li>
 <li>Error validation on both the client and the backend server</li>
 <li>Adopt the MVC approach; Model, View and Controller</li>
 
 ## Technologies & Tools Used
-<li>EJS</li>
+<li><a href="https://github.com/liabilityquek/Movies_App_python">Flask</a></li>
 <li>Javascript</li>
-<li>CSS</li>
+<li>Material UI</li>
 <li>Git commands</li>
-<li>Jest for unit testing</li>
-<li>MongoDB</li>
-<li>NodeJS</li>
+<li>React</li>
+<li>Mongoose</li>
+<li>Python</li>
+<li>Vite</li>
+<li>Moments</li>
+<li>JWT</li>
 <br>
 
-## NodeJS packages installed and used
-```
-npm install -g express-generator
-npm install mongoose
-npm install --save-dev jest 
-npm install dotenv --save
-npm install method-override
-npm install bcrypt
-npm install nodemailer
-npm install validator
-npm install connect-mongo
-npm install supertest
-npm install cookie-parser
-```
-## Configuring Jest in json
-```.json
-  scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
-    "test": "jest --testTimeout=5000"
-  },
-```
-## Application Structure</a>
-Brainstorming what are the fields required for all data models and which referencing method would be relevant.
-
-<strong><u>Application Setup:</u></strong>
-
-<li>Identify the GET and POST routes.</li>
-<li>Setting up MongoDB.</li>
-<li>Validation in the data models.</li>
-<li>Reading up on Mongoose documentation.</li>
-<li>Enable logging in, logging out and reset password.</li>
-<li>Creating the authentication.</li>
+## Wireframe</a>
+<li>Login form</li>
+<li>Sign Up Page</li>
+<li>Forget Password</li>
+<li>Logout button</li>
+<li>Page to show user's favourite movies</li>
+<li>Page to show trending movie search</li>
+<li>Page to view my account status</li>
+<li>Page to view my games for playing</li>
+<li>Page to create, amend and delete games</li>
 </li>
 <br>
 
-<strong><u>Login:</u></strong>
-<li>Create and setting up the users model, controller and view.</li>
-<li>Enable users to login, logout and reset password.</li>
-<li>Enable to create new user.</li>
-<li>Authenticating routes.</li>
-<li>Using 3rd party API Mailtrap to test for reset email sent.</li>
+## User Stories</a>
+<li>As a new user, I want to sign up for the application using my name, email, and password, so that I can access the movie recommendation feature.</li>
+<li>As an existing user, I want to log in to the application with my email and password, so that I can access my personalized movie favourites.</li>
+<li>As a logged-in user, I want to search for a movie using keywords or phrases, so that the application can provide relevant movie recommendations.</li>
+<li>As a logged-in user, I want to see a list of trending movie searches that include the movie title, poster, description, and rating, so that I can make an informed decision about what to watch.</li>
+<li>As a logged-in user, I want to log out of the application, so that my account is secure when I am not using it.</li>
+<li>As a logged-in user, I want to be able to cancel/reinstate/amend my subscription plans.</li>
+<li>As a logged-in user, I want to be able to access to different games for leisure playing.</li>
+<li>As a logged-in admin user, I want to be able to create, amend and delete games.</li>
+<li>As a logged-in admin user, I want to log out of the application, so that my account is secure when I am not using it.</li>
 <br>
+
+## Login/Forget/Reset</a>
 
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/login.png" alt="Login"></a>
+ <img style="max-width: 100%;" src="/images/login.png" alt="Login"></a>
 </p>
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/forget.png" alt="Forget Password"></a>
+ <img style="max-width: 100%;" src="/images/forget password.png" alt="Forget Password"></a>
 </p>
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/signup.png" alt="Create User"></a>
+ <img style="max-width: 100%;" src="/images/new user.png" alt="Create User"></a>
 </p>
-<br>
- <p align="center">
-  <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/emailtesting.png" alt="Create User"></a>
-</p>
-<br>
 
-<strong><u>Patient:</u></strong>
-<li>Enable to create, update, delete and view patient profile.</li>
-<li>Identifying routes for each action is done; ie form clicked.</li>
-<li>Using embedding method to create, update, delete and view patient's log.</li>
+## User - Customer</a>
 
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/retrieve.png" alt="Login"></a>
+ <img style="max-width: 100%;" src="/images/home.png" alt="home"></a>
 </p>
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/amend.png" alt="Forget Password"></a>
+ <img style="max-width: 100%;" src="/images/adding to favourites.png" alt="adding to favourites"></a>
 </p>
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/signup.png" alt="Create User"></a>
+ <img style="max-width: 100%;" src="/images/account.png" alt="account"></a>
+ <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/amend subscription.png" alt="amend subscription"></a>
+ <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/cancel subscription with trial.png" alt="cancel subscription with trial"></a>
+  <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/cancel subscription.png" alt="cancel subscription"></a>
+  <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/delete favourites.png" alt="delete favourites"></a>
+   <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/directing to the game site.png" alt="directing to game site"></a>
+   <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/favourites filter.png" alt="favourites filter"></a>
 </p>
-<br>
+   <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/games.png" alt="games"></a>
+</p>
+   <br>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/view trending search results.png" alt="trending search results"></a>
+</p>
 
-<strong><u>Queue Number:</u></strong>
-<li>Enable to create, update, delete and view queue number.</li>
-<li>Identifying routes for each action is done; ie form clicked.</li>
+## User - Admin</a>
+ <p align="center">
+  <a href="" rel="noopener">
+ <img style="max-width: 100%;" src="/images/admin.png" alt="admin page"></a>
+</p>
 <br>
  <p align="center">
   <a href="" rel="noopener">
- <img style="max-width: 100%;" src="/image/showqueue.png" alt="Create User"></a>
+ <img style="max-width: 100%;" src="/images/amend game details.png" alt="amending game details"></a>
 </p>
 <br>
 
@@ -334,48 +350,31 @@ const createPatient = async (req, res) => {
 
 ## Future Enhancements
 <p>As this application is part of a project submission, there would not be an future amendments made to this.</p>However, if there were any future enhancements to be made, these would be the following changes:</p>
-<li>Improve the UX interface</li>
-<li>Insert a calendar page to allow for appointments booking</li>
-<li>Perform more unit testing</li>
-<li>Utilise more 3rd party API like Twilio</li>
+<li>Insert a Stripe payment gateway</li>
+<li>Using OAuth</li>
 
 <br>
 ## References
 Various sources which I have seek guidance from:
 </li>
-<li><a href=https://levelup.gitconnected.com/handling-errors-in-mongoose-express-for-display-in-react-d966287f573b>Handling Mongoose Errors</a>
+<li><a href=https://www.npmjs.com/package/react-material-ui-carousel>Material UI Carousel</a>
 </li>
-<li><a href=https://jonathan-holloway.medium.com/node-and-express-session-a23eb36a052>Login and Authentication using sessions</a>
+<li><a href=https://dev.to/nagatodev/how-to-connect-flask-to-reactjs-1k8i>How to connect flask to reactjs</a>
 </li>
-<li><a href=https://nodemailer.com/about>Nodemailer documentation</a>
+<li><a href=https://flask-bcrypt.readthedocs.io/en/1.0.1>Flask Bcrypt</a>
 </li>
-<li><a href=https://stackoverflow.com/questions/63963246/bcrypt-mongoose-change-user-password>Changing password with bcrypt</a>
+<li><a href=https://www.geeksforgeeks.org/python-try-except>Python try except</a>
 </li>
-<li><a href=https://archive.jestjs.io/docs/en/24.x/configuration>Configuring Jest</a>
+<li><a href=https://flask-cors.readthedocs.io/en/latest>Configuring Flask CORS</a>
 </li>
-<li><a href=https://mongoosejs.com/docs/validation.html>Mongoose Validation</a>
-</li>
-<li><a href=https://mongoosejs.com/docs/api/model.html#model_Model-findOne>Mongoose findOne</a>
-</li>
-<li><a href=https://stackoverflow.com/questions/8675642/how-can-i-format-a-date-coming-from-mongodb>Date formatting in MongoDB</a>
-</li>
-<li><a href=https://mongoosejs.com/docs/tutorials/virtuals.html>Mongoose virtuals for dates</a>
-</li>
-</li>
-<li><a href=https://mongoosejs.com/docs/api/model.html#model_Model-findByIdAndUpdate>Mongoose findByIdAndUpdate</a>
-</li>
-<li><a href=https://jestjs.io/docs/expect#rejects>Jest throw rejects</a>
-</li>
-<li><a href=https://www.freecodecamp.org/news/how-to-test-in-express-and-mongoose-apps>Unit testing using Jest in express</a>
-</li>
-<li><a href=https://stackoverflow.com/questions/60899999/is-there-any-other-method-for-deleting-a-data-in-mongoose-after-a-given-time>Deleting a data after a given time in mongoose</a>
+<li><a href=https://rest-apis-flask.teclado.com/docs/flask_jwt_extended/token_refreshing_flask_jwt_extended>Token resfreshing Flask JWT Extended</a>
 </li>
 <br>
 
 ## Application Asset Attribution
 The CSS in this project does not belong to me. All rights belong to the original artists and owners. Below are the links to the CSS used in this project:
-<li><a href=https://codepen.io/alvaromontoro/pen/JjoWVmx>Login form CSS from Codepen</a>
+<li><a href=https://icons8.com/icons/set/movie>Movie Icon</a>
 </li>
-<li><a href=https://codepen.io/sanketbodke/pen/LYyzzYb>Nav Bar CSS from Codepen</a>
+<li><a href=https://www.freeiconspng.com/downloadimg/23500>Not available image</a>
 </li>
 

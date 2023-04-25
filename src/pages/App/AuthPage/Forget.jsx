@@ -28,15 +28,13 @@ export default function Forget() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const disable = state.password !== state.confirm;
-  
+ 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
     try {
       const response = await axios.post(
-        `https://movies-app-python.onrender.com/reset`,
+        "http://localhost:5000/reset",
         state
       );
       const data = response.data;
@@ -75,6 +73,19 @@ export default function Forget() {
     );
   };
   
+  const navigateToLogin = () => {
+    navigate('/login')
+  }
+
+  const isFormDisabled = () => {
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return (
+      state.password !== state.confirm ||
+      !emailRegex.test(state.email)||
+      state.password.length < 3 && state.confirm.length < 3 
+    )
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -123,7 +134,7 @@ export default function Forget() {
                 <Box mt={2}>
                   <Button
                     type="submit"
-                    disabled={disable}
+                    disabled={isFormDisabled}
                     variant="contained"
                     sx={{
                       backgroundColor: "darkred",
@@ -139,6 +150,25 @@ export default function Forget() {
                     Reset Password
                   </Button>
                 </Box>
+                <Box mt={2}>
+                  <Button
+                    variant="contained"
+                    onClick={navigateToLogin}
+                    sx={{
+                      backgroundColor: "darkred",
+                      color: "black",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        backgroundColor: "darkred",
+                        opacity: 0.9,
+                      },
+                    }}
+                    fullWidth
+                  >
+                    Back To Login
+                  </Button>
+                </Box>
+
               </form>
             </Paper>
           </Box>

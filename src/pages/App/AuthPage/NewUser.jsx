@@ -36,7 +36,6 @@ export default function NewUser() {
     confirm: "",
   });
 
-  const disable = state.password !== state.confirm;
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -71,7 +70,21 @@ export default function NewUser() {
   if (isLoading) {
     return <Loading/>;
   }
+
+  const navigateToLogin = () => {
+    navigate('/login')
+  }
   
+  const isFormDisabled = () => {
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return (
+      state.password !== state.confirm ||
+      state.name === "" ||
+      !emailRegex.test(state.email)||
+      state.password.length < 3 && state.confirm.length < 3 
+    )
+  }
+
   const AlertMessage = () => {
     if (!error) return null;
         return (
@@ -157,7 +170,7 @@ export default function NewUser() {
                 <Box mt={2}>
                   <Button
                     type="submit"
-                    disabled={disable}
+                    disabled={isFormDisabled}
                     variant="contained"
                     sx={{
                       backgroundColor: "darkred",
@@ -171,6 +184,25 @@ export default function NewUser() {
                     fullWidth
                   >
                     Sign Up
+                  </Button>
+                </Box>
+                <Box mt={2}>
+                  <Button
+                    
+                    variant="contained"
+                    onClick={navigateToLogin}
+                    sx={{
+                      backgroundColor: "darkred",
+                      color: "black",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        backgroundColor: "darkred",
+                        opacity: 0.9,
+                      },
+                    }}
+                    fullWidth
+                  >
+                    Back to Login
                   </Button>
                 </Box>
               </form>
