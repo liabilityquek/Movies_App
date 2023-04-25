@@ -21,7 +21,7 @@ const App = () => {
   const [user, setUser] = useState(getUser());
   const [decodedUser, setDecodedUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [subscriptionActive, setSubscriptionActive] = useState(true);
+  const [subscriptionActive, setSubscriptionActive] = useState(null);
   const [userName, setUserName] = useState("");
 
   const handleSubscriptionActive = (active) => {
@@ -68,10 +68,6 @@ const App = () => {
       console.log(`subscriptionActive : ${subscriptionActive}`);
       return (
         <>
-          <CheckSubscriptionStatus
-            setSubscriptionActive={setSubscriptionActive}
-            subscriptionActive={true}
-          />
           <Routes>
             <Route
               path="/"
@@ -103,6 +99,7 @@ const App = () => {
               element={
                 <Games
                   userName={userName}
+
                 />
               }
             />
@@ -115,6 +112,7 @@ const App = () => {
                 <Subscription
                   userName={userName}
                   handleSubscriptionActive={handleSubscriptionActive}
+
                 />
               }
             />
@@ -129,10 +127,6 @@ const App = () => {
 
       return (
         <>
-          <CheckSubscriptionStatus
-            setSubscriptionActive={setSubscriptionActive}
-            subscriptionActive={false}
-          />
           <Routes>
             <Route
               path="/*"

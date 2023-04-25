@@ -25,20 +25,20 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const fetchAccountDetails = useCallback(async () => {
     try {
       const response = await axios.get(
-        `https://movies-app-python.onrender.com/getsubscriptiondetails/${userId}`,
+        `http://localhost:5000/getsubscriptiondetails/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
+      const isTrialPeriod = moment(response.data.message.trial_end).isSameOrAfter(moment());
       setAccount(response.data.message);
       console.log(
         `fetch account details: ${JSON.stringify(response.data, null, 2)}`
-      );
-      setIsLoading(false);
-      if (response.data.message.end_date === undefined) {
+        );
+        setIsLoading(false);
+      if (response.data.message.end_date === undefined || isTrialPeriod) {
         handleSubscriptionActive(true);
       } else {
         handleSubscriptionActive(false);
@@ -50,7 +50,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       console.log("New token:", newToken);
       try {
         const response = await axios.get(
-          `https://movies-app-python.onrender.com/getsubscriptiondetails/${userId}`,
+          `http://localhost:5000/getsubscriptiondetails/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${newToken}`,
@@ -89,7 +89,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
     try {
       if (account.end_date === undefined) {
         const response = await axios.post(
-          `https://movies-app-python.onrender.com/cancelsubscription/${userId}`,
+          `http://localhost:5000/cancelsubscription/${userId}`,
           {},
           {
             headers: {
@@ -99,7 +99,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
         );
       } else if (account.end_date !== undefined) {
         const response = await axios.post(
-          `https://movies-app-python.onrender.com/reinstatesubscription/${userId}`,
+          `http://localhost:5000/reinstatesubscription/${userId}`,
           {},
           {
             headers: {
@@ -116,7 +116,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
       try {
         if (account.end_date === undefined) {
           const response = await axios.post(
-            `https://movies-app-python.onrender.com/cancelsubscription/${userId}`,
+            `http://localhost:5000/cancelsubscription/${userId}`,
             {},
             {
               headers: {
@@ -126,7 +126,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
           );
         } else if (account.end_date !== undefined) {
           const response = await axios.post(
-            `https://movies-app-python.onrender.com/reinstatesubscription/${userId}`,
+            `http://localhost:5000/reinstatesubscription/${userId}`,
             {},
             {
               headers: {
@@ -162,7 +162,9 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
     "account.end_date:",
     account.end_date,
     "isTrialDays:",
-    isTrialDays
+    isTrialDays,
+    "trial_end:",
+    account.trial_end
   );
 
   const getNextBillingDate = () => {
