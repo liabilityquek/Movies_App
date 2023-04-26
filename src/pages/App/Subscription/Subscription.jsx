@@ -25,7 +25,7 @@ export default function Subscription({ userName, handleSubscriptionActive, setUs
   const fetchAccountDetails = useCallback(async (authToken) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/getsubscriptiondetails/${userId}`,
+        `https://movies-app-python.onrender.com/getsubscriptiondetails/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -65,7 +65,7 @@ export default function Subscription({ userName, handleSubscriptionActive, setUs
     try {
       if (account.end_date === undefined) {
         const response = await axios.post(
-          `http://localhost:5000/cancelsubscription/${userId}`,
+          `https://movies-app-python.onrender.com/cancelsubscription/${userId}`,
           {},
           {
             headers: {
@@ -75,7 +75,7 @@ export default function Subscription({ userName, handleSubscriptionActive, setUs
         );
       } else if (account.end_date !== undefined) {
         const response = await axios.post(
-          `http://localhost:5000/reinstatesubscription/${userId}`,
+          `https://movies-app-python.onrender.com/reinstatesubscription/${userId}`,
           {},
           {
             headers: {
