@@ -28,7 +28,7 @@ export default function SignIn({ setUser, role }) {
       },
     },
   });
-  const [loginTry, setLoginTry] = useState({
+  const [state, setState] = useState({
     email: "",
     password: "",
     role: "Customer",
@@ -42,8 +42,8 @@ export default function SignIn({ setUser, role }) {
     setError("");
     try {
       const response = await axios.post(
-        `https://movies-app-python.onrender.com/login`,
-        loginTry
+        "http://localhost:5000/login",
+        state
       );
       const data = response.data;
 
@@ -72,8 +72,8 @@ export default function SignIn({ setUser, role }) {
   };
 
   const handleChange = (e) => {
-    setLoginTry({
-      ...loginTry,
+    setState({
+      ...state,
       [e.target.name]: e.target.value,
     });
   };
@@ -93,6 +93,15 @@ export default function SignIn({ setUser, role }) {
       </Stack>
     );
   };
+
+  const isFormDisabled = () => {
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return (
+      
+      !emailRegex.test(state.email)||
+      state.password.length < 3 && state.confirm.length < 3 
+    )
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -117,7 +126,7 @@ export default function SignIn({ setUser, role }) {
                   margin="normal"
                   variant="outlined"
                   name="email"
-                  value={loginTry.email}
+                  value={state.email}
                   onChange={handleChange}
                 />
                 <TextField
@@ -128,12 +137,12 @@ export default function SignIn({ setUser, role }) {
                   margin="normal"
                   variant="outlined"
                   name="password"
-                  value={loginTry.password}
+                  value={state.password}
                   onChange={handleChange}
                 />
                 <Box mt={2}>
                   <Select
-                    value={loginTry.role}
+                    value={state.role}
                     onChange={handleChange}
                     fullWidth
                     variant="outlined"
@@ -146,6 +155,7 @@ export default function SignIn({ setUser, role }) {
                 <Box mt={2}>
                   <Button
                     type="submit"
+                    disabled={isFormDisabled}
                     variant="contained"
                     sx={{
                       backgroundColor: "darkred",
