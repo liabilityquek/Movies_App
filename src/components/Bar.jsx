@@ -12,6 +12,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { logout } from "../utilities/users-api";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 
 const theme = createTheme({
@@ -22,9 +23,10 @@ const theme = createTheme({
   },
 });
 
-export default function Bar({ setUser }) {
+export default function Bar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const location = useLocation();
+  const navigate = useNavigate()
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -36,6 +38,7 @@ export default function Bar({ setUser }) {
 
   const handleLogout = () => {
     logout();
+    navigate("/login")
   };
 
   let currentRoute = "Account";
