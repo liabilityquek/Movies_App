@@ -15,6 +15,9 @@ import Forget from "../AuthPage/Forget";
 import Unauthorized from "../Unauthorized";
 import Loading from "../../../components/Loading";
 import Subscription from "../Subscription/Subscription";
+import { useRefresh } from "../AuthPage/UseRefresh";
+import moment from "moment";
+import axios from "axios";
 
 const App = () => {
   const [user, setUser] = useState(getUser());
@@ -22,6 +25,8 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [subscriptionActive, setSubscriptionActive] = useState(false);
   const [userName, setUserName] = useState("");
+  const { refreshToken } = useRefresh();
+  const [account, setAccount] = useState(null);
 
   const handleSubscriptionActive = (active) => {
     setSubscriptionActive(active);
@@ -42,14 +47,46 @@ const App = () => {
 
   console.log("User in App:", JSON.stringify(decodedUser, null, 2));
 
+  const fetchAccountDetails = async (authToken) => {
+    try {
+      const response = await axios.get(
+        `https://movies-app-python.onrender.com/getsubscriptiondetails/${decodedUser.sub.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      const isTrialPeriod = moment(response.data.message.trial_end).isSameOrAfter(moment());
+      setAccount(response.data.message);
+      console.log(
+        `fetch account details: ${JSON.stringify(response.data, null, 2)}`
+        );
+        setIsLoading(false);
+      if (response.data.message.end_date === undefined || isTrialPeriod) {
+        handleSubscriptionActive(true);
+      } else {
+        handleSubscriptionActive(false);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      const newToken = await refreshToken();
+      await fetchAccountDetails(newToken);
+    }
+  }
+
   useEffect(() => {
-    if (decodedUser) {
+    if(decodedUser){
       const userName = decodedUser.sub.name;
-      console.log(`userName: ${userName}`);
       setUserName(userName);
+      if (decodedUser && decodedUser.sub.role !== "Admin") {
+        const token = localStorage.getItem("token");
+        fetchAccountDetails(token);
+      }
     }
   }, [decodedUser]);
-
+  
   if (isLoading) {
     return <Loading />;
   }
@@ -67,6 +104,7 @@ const App = () => {
       console.log(`subscriptionActive : ${subscriptionActive}`);
       return (
         <>
+
           <Routes>
             <Route
               path="/"
@@ -138,6 +176,7 @@ const App = () => {
                 <Subscription
                   userName={userName}
                   handleSubscriptionActive={handleSubscriptionActive}
+                  
                 />
               }
             />
@@ -170,7 +209,8 @@ const App = () => {
             <Route
               path="/admin"
               element={
-                <Admin userName={userName} setUser={setUser}
+                <Admin userName={userName} 
+                setUser={setUser}
                 />
               }
             />
