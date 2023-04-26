@@ -4,10 +4,12 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useRefresh } from "../AuthPage/UseRefresh";
 import axios from "axios";
 
 export default function EditGame() {
   const token = localStorage.getItem("token");
+  const { refreshToken } = useRefresh();
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id;
   const navigate = useNavigate();
@@ -39,13 +41,13 @@ export default function EditGame() {
   };
 
   useEffect(() => {
-    const fetchGameDetails = async () => {
+    const fetchGameDetails = async (authToken) => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/showsinglegame/${userId}/${gameId}`,
+          `https://movies-app-python.onrender.com/showsinglegame/${userId}/${gameId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -59,20 +61,22 @@ export default function EditGame() {
         });
       } catch (error) {
         console.log(`Error fetching game details: ${error}`);
+        const newToken = await refreshToken();
+        await fetchGameDetails(newToken);
       }
     };
-    fetchGameDetails();
-  }, [gameId, userId, token]);
+    fetchGameDetails(token);
+  }, [gameId, userId, token, refreshToken]);
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, authToken) => {
     event.preventDefault();
     try {
       const response = await axios.put(
-        `http://localhost:5000/updategame/${userId}/${gameId}`,
+        `https://movies-app-python.onrender.com/updategame/${userId}/${gameId}`,
         state,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -80,6 +84,8 @@ export default function EditGame() {
       navigate("/admin");
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      await handleSubmit(event, newToken);
     }
   };
 

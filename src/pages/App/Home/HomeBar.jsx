@@ -14,7 +14,7 @@ import { styled, alpha } from "@mui/material/styles";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { DebounceInput } from "react-debounce-input";
-import { logout } from "../../../utilities/users-service";
+import { logout } from "../../../utilities/users-api";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

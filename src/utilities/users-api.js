@@ -19,6 +19,7 @@ export async function login(userData) {
 
 export function logout() {
   localStorage.removeItem("token");
+  localStorage.removeItem("refresh_token");
 }
 
 export function getToken() {

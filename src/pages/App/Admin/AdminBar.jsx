@@ -10,7 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { Link as RouterLink } from "react-router-dom";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { logout } from "../../../utilities/users-service";
+import { logout } from "../../../utilities/users-api";
 
 const theme = createTheme({
   palette: {
@@ -22,10 +22,6 @@ const theme = createTheme({
 
 export default function AdminBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
-
-  //  const GreyMenuItem = styled(MenuItem)(({ theme }) => ({
-  //   backgroundColor: theme.palette.grey[400],
-  // }));
 
   const handleLogout = () => {
     logout();

@@ -6,16 +6,16 @@ import {
   Paper,
   Typography,
   Box,
-  Select,
-  MenuItem,
 } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useRefresh } from "../AuthPage/UseRefresh";
 
 export default function CreateGame() {
   const token = localStorage.getItem("token");
+  const { refreshToken } = useRefresh();
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id;
   const navigate = useNavigate();
@@ -35,23 +35,24 @@ export default function CreateGame() {
     site: "",
   });
 
-  const disable = !state.title || !state.creator || !state.description || !state.site;
+  const disable =
+    !state.title || !state.creator || !state.description || !state.site;
 
   const handleNavigate = () => {
-    navigate('/admin');
+    navigate("/admin");
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event, authToken) => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        `http://localhost:5000/creategame/${userId}`,
+        `https://movies-app-python.onrender.com/creategame/${userId}`,
         state,
         {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
       );
       const data = response.data;
       if (!response.statusText === "OK") {
@@ -60,6 +61,8 @@ export default function CreateGame() {
       navigate("/admin");
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      await handleSubmit(event, newToken);
     }
   };
 
@@ -137,7 +140,7 @@ export default function CreateGame() {
                   variant="outlined"
                   onChange={handleChange}
                   value={state.image_url}
-                />                
+                />
                 <Box mt={2}>
                   <Button
                     type="submit"

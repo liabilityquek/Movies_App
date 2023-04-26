@@ -4,6 +4,7 @@ import AdminGrid from "./AdminGrid";
 import axios from "axios";
 import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
+import { useRefresh } from "../AuthPage/UseRefresh";
 
 const Admin = ({ userName }) => {
   const [games, setGames] = useState([]);
@@ -11,12 +12,13 @@ const Admin = ({ userName }) => {
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id
   const [isLoading, setIsLoading] = useState(true);
+  const { refreshToken }  = useRefresh();
 
-  const fetchGames = useCallback(async () => {
+  const fetchGames = useCallback(async (authToken) => {
     try {
-      const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
+      const response = await axios.get(`https://movies-app-python.onrender.com/showgames/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
 
@@ -24,15 +26,17 @@ const Admin = ({ userName }) => {
       setIsLoading(false);
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      await fetchGames(newToken);
     }
   }, [token, userId]);
 
   const handleGameUpdated = () => {
-    fetchGames();
+    fetchGames(token);
   };
 
   useEffect(() => {
-    fetchGames();
+    fetchGames(token);
   }, [fetchGames]);
 
   if (isLoading) {

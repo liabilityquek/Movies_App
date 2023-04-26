@@ -3,21 +3,23 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { Link, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { useRefresh } from "../AuthPage/UseRefresh";
 
 export default function AdminIcon({ games, onGameUpdated }) {
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id;
+  const { refreshToken }  = useRefresh();
 
-  const deleteGame = async () => {
+  const deleteGame = async (authToken) => {
     try {
       const response = await axios.delete(
-        `http://localhost:5000/deletegame/${userId}/${encodeURIComponent(
+        `https://movies-app-python.onrender.com/deletegame/${userId}/${encodeURIComponent(
           games.title
         )}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -25,6 +27,8 @@ export default function AdminIcon({ games, onGameUpdated }) {
       onGameUpdated();
     } catch (error) {
       console.log(error);
+      const newToken = await refreshToken();
+      await deleteGame(newToken);
     }
   };
 
