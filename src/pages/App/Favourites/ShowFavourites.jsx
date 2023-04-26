@@ -30,14 +30,14 @@ const ShowFavourites = ({ itemsPerPage }) => {
     setPage(value);
   };
 
-  const getAllFavourites = async () => {
+  const getAllFavourites = async (authToken) => {
     
     try {
       const response = await axios.get(
-        `https://movies-app-python.onrender.com/showfavourite/${userId}`,
+        `http://localhost:5000/showfavourite/${userId}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -46,36 +46,21 @@ const ShowFavourites = ({ itemsPerPage }) => {
     } catch (error) {
       console.log(error);
       const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        const response = await axios.get(
-          `https://movies-app-python.onrender.com/showfavourite/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${newToken}`,
-            },
-          }
-        );
-        setFavourite(response.data.favourites);
-        setIsLoading(false);
-        // console.log(`ShowFhowFavourites: ${JSON.stringify(response.data.favourites[0].name.$oid)}`);
-      } catch (error) {
-        console.log(error);
-      }
+      await getAllFavourites(newToken);
 
     }
   };
 
-  const removeFavourites = async (title) => {
+  const removeFavourites = async (title, authToken) => {
     
     try {
       const response = await axios.delete(
-        `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
+        `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
           title
         )}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -87,31 +72,12 @@ const ShowFavourites = ({ itemsPerPage }) => {
     } catch (error) {
       console.log(error);
       const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        const response = await axios.delete(
-          `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
-            title
-          )}`,
-          {
-            headers: {
-              Authorization: `Bearer ${newToken}`,
-            },
-          }
-        );
-        console.log("Removing from favorites: ", response.data);
-        setFavourite((prevFavourites) =>
-          prevFavourites.filter((fav) => fav.title !== title)
-        );
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
+      await removeFavourites(title, newToken);
     }
   };
 
   useEffect(() => {
-    getAllFavourites();
+    getAllFavourites(token);
   }, []);
 
   const sortOption = () => {

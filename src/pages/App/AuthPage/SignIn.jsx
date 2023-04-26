@@ -94,15 +94,6 @@ export default function SignIn({ setUser, role }) {
     );
   };
 
-  const isFormDisabled = () => {
-    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
-    return (
-      
-      !emailRegex.test(state.email)||
-      state.password.length < 3 && state.confirm.length < 3 
-    )
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -155,7 +146,6 @@ export default function SignIn({ setUser, role }) {
                 <Box mt={2}>
                   <Button
                     type="submit"
-                    disabled={isFormDisabled}
                     variant="contained"
                     sx={{
                       backgroundColor: "darkred",

@@ -10,15 +10,15 @@ export default function HistoryIcon({ movieData }) {
   const userId = id.sub.id;
   const { refreshToken } = useRefresh();
   useEffect(() => {
-    const checkIfMovieIsInsideFavourite = async () => {
+    const checkIfMovieIsInsideFavourite = async (authToken) => {
       try {
         const response = await axios.get(
-          `https://movies-app-python.onrender.comVER}/showsinglefavourite/${userId}/${encodeURIComponent(
+          `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -26,33 +26,18 @@ export default function HistoryIcon({ movieData }) {
       } catch (error) {
         console.log(error);
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.get(
-            `https://movies-app-python.onrender.comVER}/showsinglefavourite/${userId}/${encodeURIComponent(
-              movieData.title
-            )}`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          setFavourite(response.data.hasOwnProperty("favourites"));
-        } catch (error) {
-          console.log(error);
-        }
+        await checkIfMovieIsInsideFavourite(newToken);
       }
     };
-    checkIfMovieIsInsideFavourite();
+    checkIfMovieIsInsideFavourite(token);
   }, [movieData.title, token, refreshToken]);
 
-  const handleFavourite = async (newFavoriteState) => {
+  const handleFavourite = async (newFavoriteState, authToken) => {
     if (newFavoriteState) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `https://movies-app-python.onrender.comVER}/favourite/${userId}`,
+          `http://localhost:5000/favourite/${userId}`,
           {
             title: movieData.title,
             year: movieData.release_date,
@@ -62,7 +47,7 @@ export default function HistoryIcon({ movieData }) {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -70,38 +55,18 @@ export default function HistoryIcon({ movieData }) {
       } catch (error) {
         console.log(error);
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.post(
-            `https://movies-app-python.onrender.comVER}/favourite/${userId}`,
-            {
-              title: movieData.title,
-              year: movieData.release_date,
-              rating: movieData.vote_average,
-              description: movieData.overview,
-              image_url: `https://image.tmdb.org/t/p/w500${movieData.poster_path}`,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log("Adding to favorites: ", response.data);
-        } catch (error) {
-          console.log(error);
-        }
+        await handleFavourite(newToken);
       }
     } else {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `https://movies-app-python.onrender.comVER}/deletefavourite/${userId}/${encodeURIComponent(
+          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -109,22 +74,7 @@ export default function HistoryIcon({ movieData }) {
       } catch (error) {
         console.log(error);
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.delete(
-            `https://movies-app-python.onrender.comVER}/deletefavourite/${userId}/${encodeURIComponent(
-              movieData.title
-            )}`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log("Removing from favorites: ", response.data);
-        } catch (error) {
-          console.log(error);
-        }
+        await handleFavourite(newFavoriteState, newToken);
       }
     }
   };
@@ -132,7 +82,7 @@ export default function HistoryIcon({ movieData }) {
   const clickedFavouriteIcon = async () => {
     const newFavoriteState = !favourite;
     setFavourite(newFavoriteState);
-    handleFavourite(newFavoriteState);
+    handleFavourite(newFavoriteState, token);
   };
 
   return (

@@ -22,13 +22,13 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   const [switchedPlan, setSwitchedPlan] = useState(null);
   const { refreshToken } = useRefresh();
 
-  const fetchAccountDetails = useCallback(async () => {
+  const fetchAccountDetails = useCallback(async (authToken) => {
     try {
       const response = await axios.get(
         `http://localhost:5000/getsubscriptiondetails/${userId}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -47,33 +47,9 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
     } catch (error) {
       console.log(error);
       const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/getsubscriptiondetails/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${newToken}`,
-            },
-          }
-        );
-
-        setAccount(response.data.message);
-        console.log(
-          `fetch account details: ${JSON.stringify(response.data, null, 2)}`
-        );
-        setIsLoading(false);
-        if (response.data.message.end_date === undefined) {
-          handleSubscriptionActive(true);
-        } else {
-          handleSubscriptionActive(false);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-      }
+      await fetchAccountDetails(newToken);
     }
-  }, [token, userId, handleSubscriptionActive, refreshToken]);
+  }, [userId, handleSubscriptionActive, refreshToken]);
 
   useEffect(() => {
     if (account) {
@@ -82,10 +58,10 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
   }, []);
 
   useEffect(() => {
-    fetchAccountDetails();
+    fetchAccountDetails(token);
   }, []);
 
-  const handleButtonClick = async () => {
+  const handleButtonClick = async (authToken) => {
     try {
       if (account.end_date === undefined) {
         const response = await axios.post(
@@ -93,7 +69,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
           {},
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -103,42 +79,16 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
           {},
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
       }
-      fetchAccountDetails();
+      fetchAccountDetails(token);
     } catch (error) {
       console.log(error);
       const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        if (account.end_date === undefined) {
-          const response = await axios.post(
-            `http://localhost:5000/cancelsubscription/${userId}`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-        } else if (account.end_date !== undefined) {
-          const response = await axios.post(
-            `http://localhost:5000/reinstatesubscription/${userId}`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-        }
-        fetchAccountDetails();
-      } catch (error) {
-        console.log(error);
-      }
+      await handleButtonClick(newToken);
     }
   };
 

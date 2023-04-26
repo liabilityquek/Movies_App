@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import axios from "axios";
-// import Loading from './../../../components/Loading';
 import { useRefresh } from "./../AuthPage/UseRefresh";
 
 export default function GameIcon({
@@ -14,17 +13,16 @@ export default function GameIcon({
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id;
-  // const [isLoading, setIsLoading] = useState(true);
   const { refreshToken } = useRefresh();
 
   useEffect(() => {
-    const checkIfGameHasBeenLiked = async () => {
+    const checkIfGameHasBeenLiked = async (authToken) => {
       try {
         const response = await axios.get(
-          `https://movies-app-python.onrender.com/checklikes/${games._id.$oid}/${userId}`,
+          `http://localhost:5000/checklikes/${games._id.$oid}/${userId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -34,47 +32,27 @@ export default function GameIcon({
         );
 
         setFavourite(response.data.user_liked);
-        // setIsLoading(false)
       } catch (error) {
         console.log(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.get(
-            `https://movies-app-python.onrender.com/checklikes/${games._id.$oid}/${userId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log(
-            "check whether user has liked:",
-            JSON.stringify(response.data, null, 2)
-          );
+        await checkIfGameHasBeenLiked(newToken);
 
-          setFavourite(response.data.user_liked);
-          // setIsLoading(false)
-        } catch (error) {
-          console.log(error);
-        }
       }
     };
     if (games._id && games._id.$oid) {
-      checkIfGameHasBeenLiked();
+      checkIfGameHasBeenLiked(token);
     }
   }, [games._id.$oid]);
 
-  const handleFavourite = async (newFavoriteState) => {
+  const handleFavourite = async (newFavoriteState, authToken) => {
     if (newFavoriteState) {
       try {
         const response = await axios.post(
-          `https://movies-app-python.onrender.com/newlikes/${userId}/${games._id.$oid}`,
+          `http://localhost:5000/newlikes/${userId}/${games._id.$oid}`,
           {},
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -83,33 +61,17 @@ export default function GameIcon({
         onGameUpdated();
       } catch (error) {
         console.log(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.post(
-            `https://movies-app-python.onrender.com/newlikes/${userId}/${games._id.$oid}`,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log("Adding to likes: ", response.data);
-          handleLikeChange(1);
-          onGameUpdated();
-        } catch (error) {
-          console.log(error);
-        }
+        await handleFavourite(newToken);
+ 
       }
     } else {
       try {
         const response = await axios.delete(
-          `https://movies-app-python.onrender.com/deletelikes/${userId}/${games._id.$oid}`,
+          `http://localhost:5000/deletelikes/${userId}/${games._id.$oid}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
@@ -118,24 +80,9 @@ export default function GameIcon({
         onGameUpdated();
       } catch (error) {
         console.log(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.delete(
-            `https://movies-app-python.onrender.com/deletelikes/${userId}/${games._id.$oid}`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log("Removing likes: ", response.data);
-          handleLikeChange(-1);
-          onGameUpdated();
-        } catch (error) {
-          console.log(error);
-        }
+        await handleFavourite(newFavoriteState, newToken);
+       
       }
     }
   };
@@ -143,7 +90,7 @@ export default function GameIcon({
   const clickedFavouriteIcon = async () => {
     const newFavoriteState = !favourite;
     setFavourite(newFavoriteState);
-    handleFavourite(newFavoriteState);
+    handleFavourite(newFavoriteState, token);
   };
 
   // if(isLoading){

@@ -10,50 +10,34 @@ export default function FavouriteIcon({ image }) {
   const userId = id.sub.id;
   const { refreshToken } = useRefresh();
   useEffect(() => {
-    const checkIfMovieIsInsideFavourite = async () => {
+    const checkIfMovieIsInsideFavourite = async (authToken) => {
       try {
         const response = await axios.get(
-          `https://movies-app-python.onrender.com/showsinglefavourite/${userId}/${encodeURIComponent(
+          `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
             image.title
           )}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
         setFavourite(response.data.hasOwnProperty("favourites"));
       } catch (error) {
         console.log(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.get(
-            `https://movies-app-python.onrender.com/showsinglefavourite/${userId}/${encodeURIComponent(
-              image.title
-            )}`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          setFavourite(response.data.hasOwnProperty("favourites"));
-        } catch (error) {
-          console.log(error);
-        }
+        await checkIfMovieIsInsideFavourite(newToken);
       }
     };
-    checkIfMovieIsInsideFavourite();
+    checkIfMovieIsInsideFavourite(token);
   }, [image.title]);
 
-  const handleFavourite = async (newFavoriteState) => {
+  const handleFavourite = async (newFavoriteState, authToken) => {
     if (newFavoriteState) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `https://movies-app-python.onrender.com/favourite/${userId}`,
+          `http://localhost:5000/favourite/${userId}`,
           {
             title: image.title,
             year: image.release_date,
@@ -63,71 +47,34 @@ export default function FavouriteIcon({ image }) {
           },
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
         console.log("Adding to favorites: ", response.data);
       } catch (error) {
         console.log(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.post(
-            `https://movies-app-python.onrender.com/favourite/${userId}`,
-            {
-              title: image.title,
-              year: image.release_date,
-              rating: image.vote_average,
-              description: image.overview,
-              image_url: `https://image.tmdb.org/t/p/w500${image.poster_path}`,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log("Adding to favorites: ", response.data);
-        } catch (error) {
-          console.log(error);
-        }
+        await handleFavourite(newToken);
       }
     } else {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
+          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
             image.title
           )}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${authToken}`,
             },
           }
         );
         console.log("Removing from favorites: ", response.data);
       } catch (error) {
         console.log(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.delete(
-            `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
-              image.title
-            )}`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-          console.log("Removing from favorites: ", response.data);
-        } catch (error) {
-          console.log(error);
-        }
+        await handleFavourite(newFavoriteState, newToken);
       }
     }
   };
@@ -135,7 +82,7 @@ export default function FavouriteIcon({ image }) {
   const clickedFavouriteIcon = async () => {
     const newFavoriteState = !favourite;
     setFavourite(newFavoriteState);
-    handleFavourite(newFavoriteState);
+    handleFavourite(newFavoriteState, token);
   };
 
   return (

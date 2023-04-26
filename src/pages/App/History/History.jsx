@@ -14,11 +14,11 @@ export default function History({ userName }) {
   const { refreshToken } = useRefresh();
 
   useEffect(() => {
-    const showAllHistory = async () => {
+    const showAllHistory = async (authToken) => {
       try {
-        const response = await axios.get(`https://movies-app-python.onrender.com/showhistory`, {
+        const response = await axios.get("http://localhost:5000/showhistory", {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         });
 
@@ -37,42 +37,15 @@ export default function History({ userName }) {
         setIsLoading(false);
       } catch (error) {
         console.log(error);
-        setIsLoading(true);
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          const response = await axios.get(
-            `https://movies-app-python.onrender.com/showhistory`,
-            {
-              headers: {
-                Authorization: `Bearer ${newToken}`,
-              },
-            }
-          );
-
-          let movieResults = [];
-
-          const removeDuplicateHistoryWords =
-            response.data.search_history.filter((element, index) => {
-              return response.data.search_history.indexOf(element) === index;
-            });
-          for (const element of removeDuplicateHistoryWords) {
-            const movieData = await getMoviesBasedOnHistory(element);
-            movieResults.push(...movieData.results);
-          }
-          setShowHistory(movieResults);
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-          setIsLoading(true);
-        }
+        await showAllHistory(newToken);
       }
     };
 
-    showAllHistory();
+    showAllHistory(token);
   }, []);
 
-  const getMoviesBasedOnHistory = async (element) => {
+  const getMoviesBasedOnHistory = async (element, authToken) => {
     try {
       const response = await axios.get(
         "https://api.themoviedb.org/3/search/movie",
@@ -82,7 +55,7 @@ export default function History({ userName }) {
             query: element,
           },
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + authToken,
           },
         }
       );
@@ -92,26 +65,7 @@ export default function History({ userName }) {
     } catch (error) {
       console.error(error);
       const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        const response = await axios.get(
-          "https://api.themoviedb.org/3/search/movie",
-          {
-            params: {
-              api_key: "8c6afdd4f8e60448372b995095920f03",
-              query: element,
-            },
-            headers: {
-              Authorization: "Bearer " + newToken,
-            },
-          }
-        );
-
-        console.log(JSON.stringify(response.data, null, 2));
-        return response.data;
-      } catch (error) {
-        console.error(error);
-      }
+      await getMoviesBasedOnHistory(element, newToken);
     }
   };
 

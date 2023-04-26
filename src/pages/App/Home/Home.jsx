@@ -19,14 +19,14 @@ export default function Home({ userName }) {
     setSearchValue(e.target.value);
   };
 
-  const appendSearchValue = async () => {
+  const appendSearchValue = async (authToken) => {
     try {
       const response = await axios.post(
-        `https://movies-app-python.onrender.com/history`,
+        "http://localhost:5000/history",
         { searchValue: searchValue },
         {
           headers: {
-            Authorization: "Bearer " + token,
+            Authorization: "Bearer " + authToken,
           },
         }
       );
@@ -35,26 +35,12 @@ export default function Home({ userName }) {
       console.error(error);
       await refreshToken();
       const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        const response = await axios.post(
-          `https://movies-app-python.onrender.com/history`,
-          { searchValue: searchValue },
-          {
-            headers: {
-              Authorization: "Bearer " + newToken,
-            },
-          }
-        );
-        console.log(JSON.stringify(response.data, null, 2));
-      } catch (error) {
-        console.error(error);
-      }
+      await appendSearchValue(newToken);
     }
   };
 
   useEffect(() => {
-    const fetchMovies = async () => {
+    const fetchMovies = async (authToken) => {
       try {
         // setIsLoading(true);
         const response = await axios.get(
@@ -65,7 +51,7 @@ export default function Home({ userName }) {
               query: searchValue,
             },
             headers: {
-              Authorization: "Bearer " + token,
+              Authorization: "Bearer " + authToken,
             },
           }
         );
@@ -75,44 +61,21 @@ export default function Home({ userName }) {
         setMovies(response.data.results);
       } catch (error) {
         console.error(error);
-        await refreshToken();
         const newToken = await refreshToken();
-        console.log("New token:", newToken);
-        try {
-          // setIsLoading(true);
-          const response = await axios.get(
-            "https://api.themoviedb.org/3/search/movie",
-            {
-              params: {
-                api_key: "8c6afdd4f8e60448372b995095920f03",
-                query: searchValue,
-              },
-              headers: {
-                Authorization: "Bearer " + token,
-              },
-            }
-          );
-
-          // console.log(JSON.stringify(response.data, null, 2));
-          setIsLoading(false);
-          setMovies(response.data.results);
-        } catch (error) {
-          console.error(error);
-          setIsLoading(false);
-        }
+        await fetchMovies(newToken);
       }
     };
 
     if (searchValue) {
-      fetchMovies();
+      fetchMovies(token);
     }
   }, [searchValue]);
 
   useEffect(() => {
     if (searchValue) {
-      appendSearchValue();
+      appendSearchValue(token);
     }
-  }, []);
+  }, [searchValue]);
 
   if (isLoading) {
     return <Loading />;

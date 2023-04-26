@@ -16,12 +16,12 @@ const Games = ({ userName }) => {
   const { refreshToken }  = useRefresh();
   
 
-  const fetchGames = useCallback(async () => {
+  const fetchGames = useCallback(async (authToken) => {
 
     try {
-      const response = await axios.get(`https://movies-app-python.onrender.com/showgames/${userId}`, {
+      const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
   
@@ -32,28 +32,17 @@ const Games = ({ userName }) => {
       // await refreshToken()
         const newToken = await refreshToken();
         console.log("New token:", newToken);
-        try {
-          const response = await axios.get(`https://movies-app-python.onrender.com/showgames/${userId}`, {
-            headers: {
-              Authorization: `Bearer ${newToken}`,
-            },
-          });
-  
-          setGames(response.data.games);
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-          setIsLoading(true);
-        }
+        await fetchGames(newToken);
+
     }
-  }, [token, userId, refreshToken]);
+  }, [userId, refreshToken]);
   
   const handleGameUpdated = () => {
     fetchGames();
   };
 
   useEffect(() => {
-    fetchGames();
+    fetchGames(token);
   }, []);
 
   if (isLoading) {
