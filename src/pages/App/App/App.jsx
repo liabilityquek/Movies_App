@@ -4,7 +4,7 @@ import Home from "../Home/Home";
 import Favourites from "../Favourites/Favourites";
 import History from "../History/History";
 import AuthPage from "../AuthPage/AuthPage";
-import { getUser } from "../../../utilities/users-service";
+import { getUser } from "../../../utilities/users-api";
 import Games from "../Games/Games";
 import CreateGame from "../Admin/CreateGame";
 import Admin from "../Admin/Admin";
