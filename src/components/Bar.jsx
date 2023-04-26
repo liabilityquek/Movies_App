@@ -36,9 +36,9 @@ export default function Bar() {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = ({ setUser }) => {
     logout();
-    navigate("/login")
+    setUser(null);
   };
 
   let currentRoute = "Account";

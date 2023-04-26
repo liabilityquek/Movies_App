@@ -66,7 +66,7 @@ const theme = createTheme({
   },
 });
 
-export default function HomeBar({ handleSearch }) {
+export default function HomeBar({ handleSearch, setUser }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (e) => {
@@ -79,6 +79,7 @@ export default function HomeBar({ handleSearch }) {
 
   const handleLogout = () => {
     logout();
+    setUser(null);
   };
 
   return (

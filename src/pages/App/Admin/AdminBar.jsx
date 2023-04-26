@@ -20,11 +20,12 @@ const theme = createTheme({
   },
 });
 
-export default function AdminBar() {
+export default function AdminBar({ setUser }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleLogout = () => {
     logout();
+    setUser(null);
   };
 
   const handleClick = (e) => {
