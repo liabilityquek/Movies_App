@@ -15,7 +15,6 @@ import Forget from "../AuthPage/Forget";
 import Unauthorized from "../Unauthorized";
 import Loading from "../../../components/Loading";
 import Subscription from "../Subscription/Subscription";
-import CheckSubscriptionStatus from "../../../components/checkSubscriptionStatus";
 
 const App = () => {
   const [user, setUser] = useState(getUser());
@@ -74,6 +73,7 @@ const App = () => {
               element={
                 <Home
                   userName={userName}
+                  setUser={setUser}
                 />
               }
             />
@@ -82,6 +82,7 @@ const App = () => {
               element={
                 <History
                   userName={userName}
+                  setUser={setUser}
                 />
               }
             />
@@ -90,6 +91,7 @@ const App = () => {
               element={
                 <Favourites
                   userName={userName}
+                  setUser={setUser}
 
                 />
               }
@@ -99,6 +101,7 @@ const App = () => {
               element={
                 <Games
                   userName={userName}
+                  setUser={setUser}
 
                 />
               }
@@ -112,6 +115,7 @@ const App = () => {
                 <Subscription
                   userName={userName}
                   handleSubscriptionActive={handleSubscriptionActive}
+                  setUser={setUser}
 
                 />
               }
@@ -166,7 +170,7 @@ const App = () => {
             <Route
               path="/admin"
               element={
-                <Admin userName={userName} 
+                <Admin userName={userName} setUser={setUser}
                 />
               }
             />

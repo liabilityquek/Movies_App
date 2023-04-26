@@ -3,11 +3,11 @@ import ShowFavourites from './ShowFavourites';
 import Typography from "@mui/material/Typography";
 import Bar from '../../../components/Bar';
 
-export default function Favourites ({ userName }) {
+export default function Favourites ({ userName, setUser }) {
     return(
         <>
 
-        <Bar />
+        <Bar setUser={setUser} />
         <Typography
         component="h1"
         variant="h5"

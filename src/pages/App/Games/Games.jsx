@@ -7,7 +7,7 @@ import { useRefresh } from './../AuthPage/UseRefresh';
 import Bar from "../../../components/Bar";
 
 
-const Games = ({ userName }) => {
+const Games = ({ userName, setUser }) => {
   const [games, setGames] = useState([]);
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
@@ -50,7 +50,7 @@ const Games = ({ userName }) => {
   
   return (
     <>
-      <Bar />
+      <Bar setUser={setUser}/>
       <Typography
         component="h1"
         variant="h5"

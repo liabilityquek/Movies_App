@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import { useRefresh } from "../AuthPage/UseRefresh";
 import Bar from "../../../components/Bar";
 
-export default function Subscription({ userName, handleSubscriptionActive }) {
+export default function Subscription({ userName, handleSubscriptionActive, setUser }) {
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
   const userId = id.sub.id;
@@ -165,7 +165,7 @@ export default function Subscription({ userName, handleSubscriptionActive }) {
 
   return (
     <>
-      <Bar />
+      <Bar setUser={setUser}/>
       {showAlert && AlertMessage(switchedPlan)}
       <Box
         display="flex"

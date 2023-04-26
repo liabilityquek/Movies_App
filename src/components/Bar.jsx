@@ -12,8 +12,6 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { logout } from "../utilities/users-api";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-
 
 const theme = createTheme({
   palette: {
@@ -23,10 +21,9 @@ const theme = createTheme({
   },
 });
 
-export default function Bar() {
+export default function Bar({ setUser }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const location = useLocation();
-  const navigate = useNavigate()
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -36,7 +33,7 @@ export default function Bar() {
     setAnchorEl(null);
   };
 
-  const handleLogout = ({ setUser }) => {
+  const handleLogout = () => {
     logout();
     setUser(null);
   };

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import { useRefresh } from "../AuthPage/UseRefresh";
 import Bar from "../../../components/Bar";
 
-export default function History({ userName }) {
+export default function History({ userName, setUser }) {
   const [showHistory, setShowHistory] = useState([]);
   const token = localStorage.getItem("token");
   console.log(`token in History: ${token}`);
@@ -75,7 +75,7 @@ export default function History({ userName }) {
 
   return (
     <>
-      <Bar />
+      <Bar setUser={setUser}/>
       <Typography
         component="h1"
         variant="h5"

@@ -6,7 +6,7 @@ import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
 import { useRefresh } from "./../AuthPage/UseRefresh";
 
-export default function Home({ userName }) {
+export default function Home({ userName, setUser }) {
   const [searchValue, setSearchValue] = useState("");
   const [movies, setMovies] = useState([]);
   const token = localStorage.getItem("token");
@@ -83,7 +83,7 @@ export default function Home({ userName }) {
 
   return (
     <>
-      <HomeBar handleSearch={handleSearch} />
+      <HomeBar handleSearch={handleSearch} setUser={setUser}/>
       <Typography
         component="h1"
         variant="h5"

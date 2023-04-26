@@ -6,7 +6,7 @@ import Loading from "../../../components/Loading";
 import Typography from "@mui/material/Typography";
 import { useRefresh } from "../AuthPage/UseRefresh";
 
-const Admin = ({ userName }) => {
+const Admin = ({ userName, setUser }) => {
   const [games, setGames] = useState([]);
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
@@ -45,7 +45,7 @@ const Admin = ({ userName }) => {
   
   return (
     <>
-    <AdminBar />
+    <AdminBar setUser={setUser}/>
     <Typography
         component="h1"
         variant="h5"
