@@ -134,7 +134,6 @@ const App = () => {
                 <Subscription
                   userName={userName}
                   handleSubscriptionActive={handleSubscriptionActive}
-                  subscriptionActive={false}
                 />
               }
             />
