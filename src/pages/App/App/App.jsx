@@ -50,7 +50,7 @@ const App = () => {
   const fetchAccountDetails = async (authToken) => {
     try {
       const response = await axios.get(
-        `https://movies-app-python.onrender.com/getsubscriptiondetails/${decodedUser.sub.id}`,
+        `https://movies-app-python.onrender.com/${decodedUser.sub.id}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
