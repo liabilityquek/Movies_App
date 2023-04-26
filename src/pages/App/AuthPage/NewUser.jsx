@@ -170,7 +170,7 @@ export default function NewUser() {
                 <Box mt={2}>
                   <Button
                     type="submit"
-                    disabled={isFormDisabled}
+                    disabled={isFormDisabled()}
                     variant="contained"
                     sx={{
                       backgroundColor: "darkred",

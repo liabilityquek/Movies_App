@@ -65,7 +65,7 @@ export default function SignIn({ setUser, role }) {
 
       decodedUser.sub.role === "Customer" ? navigate("/") : navigate("/admin");
     } catch (error) {
-      setError(error.response.data.error)
+      setError(error.response.data.error);
       setIsLoading(false);
       console.log(`error: ${JSON.stringify(error.response.data.error)}`);
     }
@@ -84,14 +84,24 @@ export default function SignIn({ setUser, role }) {
 
   const AlertMessage = () => {
     if (!error) return null;
-        return (
+    return (
       <Stack sx={{ width: "100%" }} spacing={2}>
-        <Alert severity="error" onClose={() => {setError("")}}>
+        <Alert
+          severity="error"
+          onClose={() => {
+            setError("");
+          }}
+        >
           <AlertTitle>Error</AlertTitle>
           <strong>{error}</strong>
         </Alert>
       </Stack>
     );
+  };
+
+  const isFormDisabled = () => {
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+    return !emailRegex.test(state.email) || state.password.length < 3;
   };
 
   return (
@@ -146,6 +156,7 @@ export default function SignIn({ setUser, role }) {
                 <Box mt={2}>
                   <Button
                     type="submit"
+                    disabled={isFormDisabled()}
                     variant="contained"
                     sx={{
                       backgroundColor: "darkred",
