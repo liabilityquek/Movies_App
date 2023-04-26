@@ -66,7 +66,7 @@ export default function EditGame() {
       }
     };
     fetchGameDetails(token);
-  }, [gameId, userId, token, refreshToken]);
+  }, [gameId, userId, token]);
 
   const handleSubmit = async (event, authToken) => {
     event.preventDefault();
