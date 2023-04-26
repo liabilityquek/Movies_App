@@ -21,7 +21,7 @@ const App = () => {
   const [user, setUser] = useState(getUser());
   const [decodedUser, setDecodedUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [subscriptionActive, setSubscriptionActive] = useState(null);
+  const [subscriptionActive, setSubscriptionActive] = useState(false);
   const [userName, setUserName] = useState("");
 
   const handleSubscriptionActive = (active) => {
