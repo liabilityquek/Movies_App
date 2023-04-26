@@ -34,7 +34,7 @@ export default function Forget() {
     setIsLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/reset",
+        "https://movies-app-python.onrender.com/reset",
         state
       );
       const data = response.data;

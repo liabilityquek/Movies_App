@@ -220,58 +220,43 @@ const Games = ({ userName }) => {
   const [games, setGames] = useState([]);
   const token = localStorage.getItem("token");
   const id = JSON.parse(window.atob(token.split(".")[1]));
-  const userId = id.sub.id;
+  const userId = id.sub.id
   const [isLoading, setIsLoading] = useState(true);
-  const { refreshToken } = useRefresh();
+  const { refreshToken }  = useRefresh();
 
-  const fetchGames = useCallback(async () => {
+
+  const fetchGames = useCallback(async (authToken) => {
+
     try {
-      const response = await axios.get(
-        `http://localhost:5000/showgames/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.get(`https://movies-app-python.onrender.com/showgames/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
 
       setGames(response.data.games);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
-      // await refreshToken()
-      const newToken = await refreshToken();
-      console.log("New token:", newToken);
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/showgames/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${newToken}`,
-            },
-          }
-        );
+        const newToken = await refreshToken();
+        console.log("New token:", newToken);
+        await fetchGames(newToken);
 
-        setGames(response.data.games);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error);
-        setIsLoading(true);
-      }
     }
-  }, [token, userId, refreshToken]);
+  }, [userId, refreshToken]);
 
   const handleGameUpdated = () => {
     fetchGames();
   };
 
   useEffect(() => {
-    fetchGames();
+    fetchGames(token);
   }, []);
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading/>;
   }
+
   return (
     <>
       <Bar />
@@ -285,11 +270,7 @@ const Games = ({ userName }) => {
       >
         Welcome back, {userName}
       </Typography>
-      <GameGrid
-        itemsPerPage={9}
-        games={games}
-        onGameUpdated={handleGameUpdated}
-      />
+      <GameGrid itemsPerPage={9} games={games} onGameUpdated={handleGameUpdated} />
     </>
   );
 };

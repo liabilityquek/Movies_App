@@ -34,7 +34,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
     
     try {
       const response = await axios.get(
-        `http://localhost:5000/showfavourite/${userId}`,
+        `https://movies-app-python.onrender.com/showfavourite/${userId}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -55,7 +55,7 @@ const ShowFavourites = ({ itemsPerPage }) => {
     
     try {
       const response = await axios.delete(
-        `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+        `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
           title
         )}`,
         {

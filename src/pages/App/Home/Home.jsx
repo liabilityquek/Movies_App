@@ -22,7 +22,7 @@ export default function Home({ userName }) {
   const appendSearchValue = async (authToken) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/history",
+        "https://movies-app-python.onrender.com/history",
         { searchValue: searchValue },
         {
           headers: {

@@ -19,7 +19,7 @@ const Games = ({ userName }) => {
   const fetchGames = useCallback(async (authToken) => {
 
     try {
-      const response = await axios.get(`http://localhost:5000/showgames/${userId}`, {
+      const response = await axios.get(`https://movies-app-python.onrender.com/showgames/${userId}`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
@@ -29,7 +29,6 @@ const Games = ({ userName }) => {
       setIsLoading(false);
     } catch (error) {
       console.log(error);
-      // await refreshToken()
         const newToken = await refreshToken();
         console.log("New token:", newToken);
         await fetchGames(newToken);

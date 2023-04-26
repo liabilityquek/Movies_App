@@ -13,7 +13,7 @@ export default function HistoryIcon({ movieData }) {
     const checkIfMovieIsInsideFavourite = async (authToken) => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/showsinglefavourite/${userId}/${encodeURIComponent(
+          `https://movies-app-python.onrender.com/showsinglefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
@@ -37,7 +37,7 @@ export default function HistoryIcon({ movieData }) {
       // Send POST request when adding to favorites
       try {
         const response = await axios.post(
-          `http://localhost:5000/favourite/${userId}`,
+          `https://movies-app-python.onrender.com/favourite/${userId}`,
           {
             title: movieData.title,
             year: movieData.release_date,
@@ -55,13 +55,13 @@ export default function HistoryIcon({ movieData }) {
       } catch (error) {
         console.log(error);
         const newToken = await refreshToken();
-        await handleFavourite(newToken);
+        await handleFavourite(newFavoriteState, newToken);
       }
     } else {
       // DELETE request when removing from favorites
       try {
         const response = await axios.delete(
-          `http://localhost:5000/deletefavourite/${userId}/${encodeURIComponent(
+          `https://movies-app-python.onrender.com/deletefavourite/${userId}/${encodeURIComponent(
             movieData.title
           )}`,
           {
