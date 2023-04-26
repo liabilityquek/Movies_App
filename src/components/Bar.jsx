@@ -25,9 +25,6 @@ const theme = createTheme({
 export default function Bar({ setUser }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const location = useLocation();
-  //  const GreyMenuItem = styled(MenuItem)(({ theme }) => ({
-  //   backgroundColor: theme.palette.grey[400],
-  // }));
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
@@ -39,7 +36,6 @@ export default function Bar({ setUser }) {
 
   const handleLogout = () => {
     logout();
-    setUser(null);
   };
 
   let currentRoute = "Account";
