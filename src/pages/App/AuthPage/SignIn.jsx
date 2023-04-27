@@ -5,7 +5,6 @@ import {
   Paper,
   Typography,
   Box,
-  Link,
   Select,
   MenuItem,
 } from "@mui/material";
@@ -18,6 +17,7 @@ import Loading from "../../../components/Loading";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import AlertTitle from "@mui/material/AlertTitle";
+import { Link } from 'react-router-dom';
 
 export default function SignIn({ setUser, role }) {
   const navigate = useNavigate();
@@ -173,10 +173,10 @@ export default function SignIn({ setUser, role }) {
                   </Button>
                 </Box>
                 <Box mt={2} display="flex" justifyContent="space-between">
-                  <Link href="/signup" variant="body2">
+                  <Link to="/signup" variant="body2">
                     New User
                   </Link>
-                  <Link href="/forget" variant="body2">
+                  <Link to="/forget" variant="body2">
                     Forgot Password?
                   </Link>
                 </Box>
