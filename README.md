@@ -14,7 +14,14 @@ Click <a href="https://github.com/liabilityquek/Movies_App_python">here</a> to v
 
 ## Deployment
 
-The application is deployed on Vercel. You would need to <a href="https://onlymovies-umber.vercel.app">create</a> an account to access the application.
+The application is deployed on <a href="https://onlymovies-umber.vercel.app">Vercel</a>.
+<br/>
+Dummy Login Credentials:
+```
+Email: sample@gmail.com
+Password: 123
+```
+
 The backend is deployed on <a href="https://movies-app-python.onrender.com">Render</a>.
 
 ## Features
